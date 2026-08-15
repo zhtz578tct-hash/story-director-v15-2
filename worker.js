@@ -663,12 +663,35 @@ async function analyze(env,b){
  return {...d,ok:true};
 }
 function defaultServerVoice(s){
- const role=String(s?.role||"").toLowerCase();
- const gender=String(s?.gender||"").toLowerCase();
- if(role.includes("narrator")||role.includes("narration"))return "shimmer";
- if(gender==="female")return "nova";
- if(gender==="male")return "onyx";
- return "alloy";
+  const role=String(s?.role||"").toLowerCase();
+  const gender=String(s?.gender||"").toLowerCase();
+  const name=String(s?.name||"").trim();
+
+  // Narrator हमेशा Onyx
+  if(role.includes("narrator")||role.includes("narration")){
+    return "onyx";
+  }
+
+  // Character name से stable voice चुनें,
+  // ताकि एक ही character की voice बार-बार न बदले।
+  let hash=0;
+  for(let i=0;i<name.length;i++){
+    hash=((hash<<5)-hash)+name.charCodeAt(i);
+    hash|=0;
+  }
+
+  const maleVoices=["alloy","echo","fable"];
+  const femaleVoices=["nova","shimmer"];
+
+  if(gender==="female"){
+    return femaleVoices[Math.abs(hash)%femaleVoices.length];
+  }
+
+  if(gender==="male"){
+    return maleVoices[Math.abs(hash)%maleVoices.length];
+  }
+
+  return "alloy";
 }
 
 function repairMojibake(s){
