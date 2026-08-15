@@ -26,6 +26,173 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .speaker{border:1px solid #e2e2e2;border-radius:16px;padding:14px;margin-top:10px;background:#fafafa}
 audio{width:100%;margin-top:14px}
 @media(max-width:650px){.grid,.three{grid-template-columns:1fr}.card{padding:17px}h1{font-size:28px}}
+/* ===== Story Director V16 UI ===== */
+
+body{
+  background:
+    radial-gradient(circle at top right,#e9e4ff 0,#f5f6f8 38%,#eef1f5 100%);
+  color:#111;
+}
+
+.wrap{
+  max-width:920px;
+  margin:auto;
+  padding:18px 12px 80px;
+}
+
+.card{
+  background:rgba(255,255,255,.94);
+  border:1px solid rgba(255,255,255,.8);
+  border-radius:28px;
+  padding:22px;
+  margin-bottom:16px;
+  box-shadow:0 12px 35px rgba(0,0,0,.08);
+  backdrop-filter:blur(18px);
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  background:#111;
+  color:#fff;
+  border-radius:999px;
+  padding:7px 13px;
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:.2px;
+}
+
+h1{
+  font-size:32px;
+  line-height:1.12;
+  letter-spacing:-.8px;
+  margin:14px 0 8px;
+}
+
+.sub{
+  color:#667085;
+  font-size:15px;
+  line-height:1.55;
+}
+
+label{
+  font-size:14px;
+  font-weight:700;
+  color:#20242b;
+  margin:16px 0 8px;
+}
+
+textarea,
+input,
+select{
+  background:#f8f9fb;
+  border:1px solid #dfe3e8;
+  border-radius:16px;
+  padding:14px 15px;
+  font-size:16px;
+  color:#111;
+  outline:none;
+  transition:.2s ease;
+}
+
+textarea:focus,
+input:focus,
+select:focus{
+  background:#fff;
+  border-color:#8b7cf6;
+  box-shadow:0 0 0 4px rgba(139,124,246,.12);
+}
+
+textarea{
+  min-height:220px;
+}
+
+button{
+  border:0;
+  border-radius:16px;
+  padding:14px 18px;
+  min-height:50px;
+  font-size:16px;
+  font-weight:700;
+  transition:transform .15s ease,opacity .15s ease,box-shadow .15s ease;
+}
+
+button:not(:disabled):active{
+  transform:scale(.97);
+}
+
+button:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
+
+.primary{
+  width:100%;
+  background:#111;
+  color:#fff;
+  font-size:17px;
+  box-shadow:0 8px 20px rgba(0,0,0,.14);
+}
+
+.primary:not(:disabled):hover{
+  box-shadow:0 10px 24px rgba(0,0,0,.2);
+}
+
+.row{
+  gap:10px;
+}
+
+.status{
+  border-radius:16px;
+}
+
+.speaker{
+  background:#fafbfc;
+  border:1px solid #e5e7eb;
+  border-radius:18px;
+  padding:16px;
+  margin-top:12px;
+  box-shadow:0 5px 16px rgba(0,0,0,.04);
+}
+
+audio{
+  border-radius:14px;
+}
+
+.check{
+  background:#f7f7f9;
+  border-radius:14px;
+  padding:10px 12px;
+}
+
+@media(max-width:650px){
+
+  .wrap{
+    padding:12px 10px 70px;
+  }
+
+  .card{
+    border-radius:23px;
+    padding:17px;
+  }
+
+  h1{
+    font-size:27px;
+  }
+
+  textarea{
+    min-height:190px;
+  }
+
+  button{
+    width:100%;
+  }
+
+  .row{
+    flex-direction:column;
+  }
+}
 </style>
 </head>
 <body>
