@@ -439,10 +439,10 @@ function voiceOption(v,label,current){
 function defaultVoice(s){
  const role=String(s.role||"").toLowerCase();
  const gender=String(s.gender||"").toLowerCase();
- if(role.includes("narrator")||role.includes("narration"))return "shimmer";
- if(gender==="female")return "nova";
- if(gender==="male")return "onyx";
- return "alloy";
+ if(role.includes("narrator")||role.includes("narration"))return "onyx";
+if(gender==="female")return "nova";
+if(gender==="male")return "alloy";
+return "alloy";
 }
 
 function wavInfo(buf){
@@ -795,7 +795,7 @@ async function analyze(env,b){
   "Preserve every character name exactly as written. Never rename characters.",
   "Use narrator only for narration, scene description and non-dialogue text.",
   "Every spoken dialogue must belong to the correct character.",
-  "Voice defaults: narrator=shimmer, male=onyx, female=nova, unknown=alloy.",
+  "Voice defaults: narrator-onyx, male-alloy, female-nova",
   "Detect the dominant emotion of every segment from context, not merely punctuation.",
   "Allowed emotions: neutral,happy,sad,angry,fear,surprise,romantic,playful,tense,serious,concerned,dramatic.",
   "Intensity is 0–100 and must reflect actual emotional strength.",
