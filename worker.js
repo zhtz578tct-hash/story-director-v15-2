@@ -236,7 +236,7 @@ function renderSpeakers(){
   const emotion=strongest?.emotion||"neutral";
   const intensity=strongest?.intensity??50;
   const delivery=strongest?.delivery||"natural";
-  const voice=s.voice||defaultVoice(s);
+  const voice=s.voice||defaultServerVoice(s);
   return '<div class="speaker"><b>'+esc(s.name)+'</b>'+
    '<div class="small">'+esc(s.role||"character")+" · "+esc(s.gender||"unknown")+'</div>'+
    '<label>🎙️ Voice</label>'+
@@ -674,8 +674,8 @@ function defaultServerVoice(s){
     return "onyx";
   }
 
-  // Character name से stable voice चुनें,
-  // ताकि एक ही character की voice बार-बार न बदले।
+  // Character के नाम से stable voice चुनें
+  // एक ही character की voice हर बार वही रहेगी
   let hash=0;
   for(let i=0;i<name.length;i++){
     hash=((hash<<5)-hash)+name.charCodeAt(i);
@@ -685,14 +685,17 @@ function defaultServerVoice(s){
   const maleVoices=["alloy","echo","fable"];
   const femaleVoices=["nova","shimmer"];
 
+  // Female character
   if(gender==="female"){
     return femaleVoices[Math.abs(hash)%femaleVoices.length];
   }
 
+  // Male character
   if(gender==="male"){
     return maleVoices[Math.abs(hash)%maleVoices.length];
   }
 
+  // Unknown character
   return "alloy";
 }
 
