@@ -382,7 +382,7 @@ async function generateAudioFrom(index=0){
    const isNarrator=role.includes("narrator")||role.includes("narration");
    const voice=s.voice||speakerInfo.voice||(isNarrator?"shimmer":gender==="female"?"nova":gender==="male"?"onyx":"alloy");
    const language=isNarrator?"Hindi":($("language").value||"Hindi");
-   const text=String(s.text||"").replace(/^\\s*(?:\\[[^\\]]{1,80}\\]|\\([^)]{1,80}\\))\\s*/g,"").trim();
+   const text=String(s.text||"").replace(new RegExp("^\\s*"+String(s.speaker||"").replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"\\s*(?:\\([^)]*\\)|\\[[^\\]]*\\])?\\s*[:：\\-–—]\\s*","iu"),"").replace(/^\s*(?:\[[^\]]{1,500}\]|\([^)]{1,500}\))\s*/g,"").replace(/\b(?:emotion|intensity|delivery|भाव|भावना|तीव्रता|अभिव्यक्ति)\s*[:=][^\n,;|]*/giu,"").trim();
    if(!text)continue;
 
    status("progress","🎙️ Segment "+(i+1)+" / "+segments.length+
