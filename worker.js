@@ -236,7 +236,7 @@ function renderSpeakers(){
   const emotion=strongest?.emotion||"neutral";
   const intensity=strongest?.intensity??50;
   const delivery=strongest?.delivery||"natural";
-  const voice=s.voice||defaultServerVoice(s);
+  const voice=(String(s.role||"").toLowerCase().includes("narrator")||String(s.role||"").toLowerCase().includes("narration"))?"onyx":(s.voice||defaultServerVoice(s));
   return '<div class="speaker"><b>'+esc(s.name)+'</b>'+
    '<div class="small">'+esc(s.role||"character")+" · "+esc(s.gender||"unknown")+'</div>'+
    '<label>🎙️ Voice</label>'+
