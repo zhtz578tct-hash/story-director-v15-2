@@ -827,7 +827,7 @@ async function analyze(env,b){
   pace:s.pace||"normal",
   pause:s.pause||"none",
   emphasis:s.emphasis||"normal",
-  voice:s.voice||undefined
+  voice:undefined
  }));
  return {...d,ok:true};
 }
