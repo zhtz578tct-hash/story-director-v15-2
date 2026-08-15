@@ -817,7 +817,7 @@ async function analyze(env,b){
 
  d.speakers=d.speakers.map(s=>({
   ...s,
-  voice:s.voice||defaultServerVoice(s)
+  voice:defaultServerVoice(s)
  }));
  d.segments=d.segments.map(s=>({
   ...s,
