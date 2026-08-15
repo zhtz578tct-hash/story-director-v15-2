@@ -380,9 +380,11 @@ async function generateAudioFrom(index=0){
    const role=String(speakerInfo.role||"").toLowerCase();
    const gender=String(speakerInfo.gender||"").toLowerCase();
    const isNarrator=role.includes("narrator")||role.includes("narration");
-   const voice=s.voice||speakerInfo.voice||(isNarrator?"shimmer":gender==="female"?"nova":gender==="male"?"onyx":"alloy");
+   const voice=isNarrator?"onyx":(s.voice||speakerInfo.voice||(gender==="female"?"nova":gender==="male"?"alloy":"alloy"));
    const language=isNarrator?"Hindi":($("language").value||"Hindi");
-   const text=String(s.text||"").replace(new RegExp("^\\s*"+String(s.speaker||"").replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"\\s*(?:\\([^)]*\\)|\\[[^\\]]*\\])?\\s*[:：\\-–—]\\s*","iu"),"").replace(/^\s*(?:\[[^\]]{1,500}\]|\([^)]{1,500}\))\s*/g,"").replace(/\b(?:emotion|intensity|delivery|भाव|भावना|तीव्रता|अभिव्यक्ति)\s*[:=][^\n,;|]*/giu,"").trim();
+   const speakerName=String(s.speaker||"");
+const escapedSpeaker=speakerName.split("").map(ch=>"\\^$.*+?()[]{}|".includes(ch)?"\\"+ch:ch).join("");
+const text=String(s.text||"").replace(new RegExp("^\\s*"+escapedSpeaker+"\\s*(?:\\([^)]*\\)|\\[[^\\]]*\\])?\\s*[:：\\-–—]\\s*","iu"),"").replace(/^\\s*(?:\\[[^\\]]{1,500}\\]|\\([^)]{1,500}\\))\\s*/g,"").replace(/\\b(?:emotion|intensity|delivery|भाव|भावना|तीव्रता|अभिव्यक्ति)\\s*[:=][^\\n,;|]*/giu,"").trim();;
    if(!text)continue;
 
    status("progress","🎙️ Segment "+(i+1)+" / "+segments.length+
