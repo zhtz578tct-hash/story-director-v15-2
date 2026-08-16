@@ -207,10 +207,11 @@ function tryResumeAudio(){if(audioResumeBusy||document.hidden||!audioGeneration.
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)tryResumeAudio()});window.addEventListener('pageshow',tryResumeAudio);window.addEventListener('focus',tryResumeAudio);
 $('generate').onclick=async()=>{
   try{
+
     if(!detected?.segments?.length){
       status(
         'progress',
-        '❌ पहले "Detect Speakers & Emotions" चलाएँ। कोई audio segment तैयार नहीं है।',
+        '❌ पहले "Detect Speakers & Emotions" चलाएँ। कोई audio segment नहीं मिला।',
         'err'
       );
       return;
@@ -225,29 +226,44 @@ $('generate').onclick=async()=>{
     };
 
     finalBlob=null;
+    window.finalBlob=null;
+
+    $('generate').disabled=true;
+
+    if($('download')) $('download').disabled=true;
+    if($('downloadMp3')) $('downloadMp3').disabled=true;
+    if($('downloadM4a')) $('downloadM4a').disabled=true;
 
     status(
       'progress',
-      '🎙️ Audio generation शुरू हो रही है…',
+      '🎙️ Audio generation शुरू हो रही है...',
       'info'
     );
 
     await generateAudioFrom(0);
 
   }catch(e){
+
     console.error('Generate Audio Error:',e);
 
+    audioGeneration.running=false;
     audioGeneration.paused=true;
 
     status(
       'progress',
-      '❌ Audio generation शुरू नहीं हो सकी।\n\n'+
+      '❌ Audio generation शुरू नहीं हो सकी.\n\n'+
       (e?.message||String(e)),
       'err'
     );
 
   }finally{
+
     $('generate').disabled=false;
+
+    if($('resumeAudio')){
+      $('resumeAudio').disabled=!audioGeneration.paused;
+    }
+
   }
 };
 
