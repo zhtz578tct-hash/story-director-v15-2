@@ -7,6 +7,7 @@ const HTML = String.raw`<!doctype html>
 <style>
 /* =========================================================
    STORY DIRECTOR V16.2 — iPHONE UI REFINEMENT
+   CLEAN • PROFESSIONAL • MINIMAL
    CSS ONLY — DO NOT CHANGE HTML / JAVASCRIPT
    ========================================================= */
 
@@ -338,11 +339,6 @@ audio{
     border-radius:20px;
   }
 
-  /*
-     Reference V16.2:
-     Home quick actions remain three compact cards
-     even on iPhone.
-  */
   .choice-grid{
     grid-template-columns:repeat(3,1fr);
     gap:7px;
@@ -409,7 +405,6 @@ audio{
 /* =========================================================
    END V16.2 REFINEMENT
    ========================================================= */
-
 </style>
 </head>
 <body>
