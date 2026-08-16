@@ -171,7 +171,7 @@ try{
   renderSpeakers();
   renderSegments();
 
-  $('generate').disabled=!(detected.segments&&detected.segments.length);
+  $('generate').disabled=false;
 
   setStep(3);
   showPage('directorPage');
