@@ -6,196 +6,629 @@ const HTML = String.raw`<!doctype html>
 <title>Story Director V16.1</title>
 <style>
 /* =========================================================
-   STORY DIRECTOR V16.2 — iPHONE UI REFINEMENT
-   CLEAN • PROFESSIONAL • MINIMAL
-   CSS ONLY — DO NOT CHANGE HTML / JAVASCRIPT
+   STORY DIRECTOR V16.3
+   CLEAN PROFESSIONAL — iPHONE FIRST UI
+   CSS ONLY
+   DO NOT CHANGE HTML / JAVASCRIPT
    ========================================================= */
 
-/* ---------- GLOBAL iPHONE PROPORTIONS ---------- */
+/* =========================================================
+   1. RESET / GLOBAL
+   ========================================================= */
 
-.wrap{
-  max-width:430px;
-  padding-left:12px;
-  padding-right:12px;
+*,
+*::before,
+*::after{
+  box-sizing:border-box;
 }
 
+html{
+  margin:0;
+  padding:0;
+  background:#090a10;
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
+}
+
+body{
+  margin:0;
+  padding:0;
+  min-height:100vh;
+  background:
+    radial-gradient(
+      circle at 50% -10%,
+      rgba(139,92,246,.10),
+      transparent 38%
+    ),
+    #090a10;
+  color:#f5f5f7;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Display",
+    "SF Pro Text",
+    system-ui,
+    sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+
+button,
+input,
+select,
+textarea{
+  font:inherit;
+  -webkit-appearance:none;
+  appearance:none;
+}
+
+button{
+  cursor:pointer;
+  border:0;
+}
+
+img{
+  max-width:100%;
+}
+
+
+/* =========================================================
+   2. MAIN APP CONTAINER
+   ========================================================= */
+
+.wrap{
+  width:100%;
+  max-width:430px;
+  margin:0 auto;
+  padding:
+    env(safe-area-inset-top)
+    12px
+    118px;
+}
+
+
+/* =========================================================
+   3. TOP BAR
+   ========================================================= */
+
 .topbar{
-  padding-top:6px;
-  padding-bottom:8px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  min-height:54px;
+  padding:7px 4px 8px;
 }
 
 .brand{
-  font-size:15px;
-  padding:8px 6px;
-}
-
-/* ---------- HERO / HOME ---------- */
-
-.hero{
-  border-radius:24px;
-  padding:20px 17px;
-  min-height:155px;
-  background:
-    radial-gradient(
-      circle at 85% 15%,
-      rgba(168,85,247,.22),
-      transparent 38%
-    ),
-    linear-gradient(
-      145deg,
-      #191b29,
-      #10111a
-    );
-}
-
-.hero h1{
-  font-size:28px;
-  line-height:1.08;
-  margin-bottom:9px;
-}
-
-.hero p{
-  font-size:13px;
-  line-height:1.5;
-}
-
-/* ---------- HOME QUICK ACTIONS ---------- */
-
-.choice-grid{
-  grid-template-columns:repeat(3,1fr);
-  gap:8px;
-  margin-top:12px;
-}
-
-.choice{
-  min-height:105px;
-  padding:13px 10px;
-  border-radius:17px;
   display:flex;
-  flex-direction:column;
-  justify-content:center;
-}
-
-.choice b{
-  font-size:13px;
-  line-height:1.25;
-}
-
-.choice span{
-  font-size:10px;
-  line-height:1.35;
-}
-
-/* ---------- CARDS ---------- */
-
-.card{
-  border-radius:21px;
-  padding:16px;
-  margin-bottom:11px;
-}
-
-.card h2{
-  font-size:20px;
-  margin-bottom:12px;
-}
-
-/* ---------- SECTION HEADERS ---------- */
-
-.section-title{
-  min-height:30px;
-}
-
-.section-title h2{
-  margin-bottom:0;
-}
-
-/* ---------- INPUTS ---------- */
-
-label{
-  font-size:11px;
-  margin-top:11px;
-  margin-bottom:6px;
-}
-
-textarea,
-input,
-select{
-  min-height:46px;
-  padding:12px;
-  border-radius:14px;
-  font-size:14px;
-}
-
-textarea{
-  min-height:155px;
-}
-
-/* ---------- STORY LENGTH / CHOICES ---------- */
-
-.choice-grid .choice{
-  transition:all .18s ease;
-}
-
-.choice-grid .choice:active{
-  transform:scale(.97);
-}
-
-/* ---------- BUTTONS ---------- */
-
-button{
-  min-height:44px;
-  border-radius:14px;
-  font-size:13px;
-}
-
-.primary{
-  min-height:48px;
-  border-radius:15px;
-  font-size:15px;
-}
-
-/* ---------- ROW BUTTONS ---------- */
-
-.row{
+  align-items:center;
   gap:7px;
-}
-
-.row button{
-  min-width:0;
-  padding:12px 10px;
-}
-
-/* ---------- STATUS ---------- */
-
-.status{
-  border-radius:14px;
-  padding:11px 12px;
-  font-size:12px;
-}
-
-/* ---------- SPEAKER MANAGER ---------- */
-
-.speaker{
-  border-radius:19px;
-  padding:14px;
-  margin-top:9px;
-}
-
-.speaker-head{
-  align-items:flex-start;
-}
-
-.speaker-name{
+  color:#f5f5f7;
   font-size:16px;
+  font-weight:700;
+  letter-spacing:-.3px;
 }
 
-.pill{
-  padding:5px 8px;
-  font-size:10px;
+.topbar .brand{
   white-space:nowrap;
 }
 
-/* ---------- SPEAKER DETAILS ---------- */
+
+/* =========================================================
+   4. STEPPER / WORKFLOW
+   ========================================================= */
+
+.stepper{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  margin:2px 2px 14px;
+  padding:4px;
+  overflow-x:auto;
+  scrollbar-width:none;
+}
+
+.stepper::-webkit-scrollbar{
+  display:none;
+}
+
+.step{
+  flex:1 0 auto;
+  min-width:0;
+  padding:8px 9px;
+  border-radius:11px;
+  color:#858795;
+  font-size:11px;
+  font-weight:600;
+  text-align:center;
+  white-space:nowrap;
+  background:rgba(255,255,255,.035);
+  border:1px solid rgba(255,255,255,.055);
+}
+
+.step.active{
+  color:#fff;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(139,92,246,.30),
+      rgba(59,130,246,.16)
+    );
+  border-color:rgba(168,85,247,.34);
+  box-shadow:
+    0 5px 18px rgba(0,0,0,.18);
+}
+
+
+/* =========================================================
+   5. PAGE SYSTEM
+   ========================================================= */
+
+.page{
+  width:100%;
+}
+
+.page[hidden]{
+  display:none !important;
+}
+
+
+/* =========================================================
+   6. HERO
+   ========================================================= */
+
+.hero{
+  position:relative;
+  overflow:hidden;
+  width:100%;
+  min-height:175px;
+  padding:23px 18px;
+  margin-bottom:12px;
+  border-radius:25px;
+
+  background:
+    radial-gradient(
+      circle at 88% 8%,
+      rgba(168,85,247,.30),
+      transparent 38%
+    ),
+    radial-gradient(
+      circle at 5% 100%,
+      rgba(59,130,246,.14),
+      transparent 40%
+    ),
+    linear-gradient(
+      145deg,
+      #1a1c2b,
+      #0f1018
+    );
+
+  border:1px solid rgba(255,255,255,.075);
+
+  box-shadow:
+    0 16px 45px rgba(0,0,0,.28);
+}
+
+.hero::after{
+  content:"";
+  position:absolute;
+  width:170px;
+  height:170px;
+  right:-80px;
+  top:-85px;
+  border-radius:50%;
+  background:rgba(168,85,247,.10);
+  filter:blur(30px);
+  pointer-events:none;
+}
+
+.hero h1{
+  position:relative;
+  z-index:1;
+  margin:0 0 10px;
+  color:#fff;
+  font-size:28px;
+  line-height:1.08;
+  font-weight:750;
+  letter-spacing:-1px;
+}
+
+.hero p{
+  position:relative;
+  z-index:1;
+  margin:0;
+  max-width:350px;
+  color:#b9bac5;
+  font-size:13px;
+  line-height:1.55;
+}
+
+
+/* =========================================================
+   7. HOME QUICK ACTIONS
+   ========================================================= */
+
+.choice-grid{
+  display:grid !important;
+  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  gap:8px !important;
+  width:100%;
+  margin:12px 0 15px;
+}
+
+.choice{
+  position:relative;
+  display:flex !important;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+
+  width:100%;
+  min-width:0;
+  min-height:108px;
+
+  padding:13px 8px;
+
+  color:#f7f7fa;
+  text-align:center;
+
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.08);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.075),
+      rgba(255,255,255,.035)
+    );
+
+  box-shadow:
+    0 8px 25px rgba(0,0,0,.18);
+
+  transition:
+    transform .16s ease,
+    border-color .16s ease,
+    background .16s ease;
+}
+
+.choice:hover{
+  border-color:rgba(168,85,247,.28);
+  background:
+    linear-gradient(
+      145deg,
+      rgba(139,92,246,.14),
+      rgba(255,255,255,.045)
+    );
+}
+
+.choice:active{
+  transform:scale(.965);
+}
+
+.choice b{
+  display:block;
+  max-width:100%;
+  color:#fff;
+  font-size:12px;
+  line-height:1.3;
+  font-weight:700;
+}
+
+.choice span{
+  display:block;
+  max-width:100%;
+  margin-top:5px;
+  color:#9698a6;
+  font-size:9px;
+  line-height:1.35;
+}
+
+
+/* =========================================================
+   8. CARDS
+   ========================================================= */
+
+.card{
+  width:100%;
+  margin:0 0 12px;
+  padding:17px;
+
+  border-radius:21px;
+  border:1px solid rgba(255,255,255,.065);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(27,29,41,.98),
+      rgba(16,17,25,.98)
+    );
+
+  box-shadow:
+    0 9px 30px rgba(0,0,0,.20);
+}
+
+.card h2{
+  margin:0 0 13px;
+  color:#f5f5f7;
+  font-size:20px;
+  line-height:1.2;
+  font-weight:700;
+  letter-spacing:-.35px;
+}
+
+
+/* =========================================================
+   9. SECTION TITLES
+   ========================================================= */
+
+.section-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  min-height:31px;
+  margin-bottom:10px;
+}
+
+.section-title h2{
+  margin:0;
+  color:#f4f4f6;
+}
+
+
+/* =========================================================
+   10. LABELS
+   ========================================================= */
+
+label{
+  display:block;
+  margin:12px 0 6px;
+  color:#9698a6;
+  font-size:11px;
+  line-height:1.3;
+  font-weight:600;
+}
+
+
+/* =========================================================
+   11. INPUTS
+   ========================================================= */
+
+input,
+select,
+textarea{
+  width:100%;
+  border:1px solid rgba(255,255,255,.09);
+  outline:none;
+
+  color:#f4f4f6;
+  background:
+    rgba(255,255,255,.045);
+
+  border-radius:14px;
+  font-size:14px;
+
+  transition:
+    border-color .16s ease,
+    background .16s ease,
+    box-shadow .16s ease;
+}
+
+input,
+select{
+  min-height:46px;
+  padding:11px 12px;
+}
+
+textarea{
+  min-height:150px;
+  padding:12px;
+  line-height:1.55;
+  resize:vertical;
+}
+
+input::placeholder,
+textarea::placeholder{
+  color:#777986;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+  border-color:rgba(139,92,246,.58);
+  background:rgba(255,255,255,.06);
+  box-shadow:
+    0 0 0 3px rgba(139,92,246,.10);
+}
+
+select{
+  color:#eeeeF2;
+}
+
+
+/* =========================================================
+   12. GRID
+   ========================================================= */
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:9px;
+}
+
+.grid > *{
+  min-width:0;
+}
+
+
+/* =========================================================
+   13. BUTTONS
+   ========================================================= */
+
+button{
+  min-height:44px;
+  padding:10px 13px;
+
+  color:#ededf2;
+
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:14px;
+
+  background:
+    rgba(255,255,255,.055);
+
+  font-size:13px;
+  font-weight:650;
+
+  transition:
+    transform .15s ease,
+    background .15s ease,
+    border-color .15s ease,
+    opacity .15s ease;
+}
+
+button:active{
+  transform:scale(.975);
+}
+
+button:disabled{
+  opacity:.42;
+  cursor:not-allowed;
+}
+
+button.secondary{
+  background:rgba(255,255,255,.055);
+}
+
+button.secondary:hover{
+  background:rgba(255,255,255,.085);
+}
+
+
+/* =========================================================
+   14. PRIMARY BUTTON
+   ========================================================= */
+
+button.primary,
+.primary{
+  width:100%;
+  min-height:49px;
+  margin-top:14px;
+
+  color:#fff;
+
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:15px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #8b5cf6,
+      #6366f1
+    );
+
+  box-shadow:
+    0 9px 25px rgba(99,102,241,.20);
+
+  font-size:14px;
+  font-weight:700;
+}
+
+button.primary:hover,
+.primary:hover{
+  background:
+    linear-gradient(
+      135deg,
+      #9569f7,
+      #7073f4
+    );
+}
+
+
+/* =========================================================
+   15. BUTTON ROW
+   ========================================================= */
+
+.row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  width:100%;
+}
+
+.row > *{
+  flex:1;
+  min-width:0;
+}
+
+.row button{
+  width:100%;
+}
+
+
+/* =========================================================
+   16. STATUS
+   ========================================================= */
+
+.status{
+  width:100%;
+  margin-top:10px;
+  padding:11px 12px;
+
+  color:#aaaeba;
+  background:rgba(255,255,255,.045);
+
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:14px;
+
+  font-size:12px;
+  line-height:1.45;
+}
+
+
+/* =========================================================
+   17. SPEAKER MANAGER
+   ========================================================= */
+
+.speaker{
+  width:100%;
+  margin-top:9px;
+  padding:14px;
+
+  border-radius:19px;
+  border:1px solid rgba(255,255,255,.07);
+
+  background:
+    rgba(255,255,255,.035);
+}
+
+.speaker-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:8px;
+}
+
+.speaker-name{
+  color:#f4f4f6;
+  font-size:16px;
+  font-weight:700;
+}
+
+.pill{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:5px 8px;
+  border-radius:999px;
+
+  color:#bcb5ff;
+  background:rgba(139,92,246,.12);
+  border:1px solid rgba(139,92,246,.18);
+
+  font-size:10px;
+  font-weight:650;
+  white-space:nowrap;
+}
 
 .speaker select{
   min-height:45px;
@@ -205,42 +638,76 @@ button{
   min-height:43px;
 }
 
-/* ---------- SCRIPT SEGMENTS ---------- */
+
+/* =========================================================
+   18. SCRIPT SEGMENTS
+   ========================================================= */
 
 .seg{
-  border-radius:17px;
+  width:100%;
+  margin-top:8px;
   padding:12px;
+
+  border-radius:17px;
+  border:1px solid rgba(255,255,255,.065);
+
+  background:rgba(255,255,255,.035);
 }
 
 .seg .who{
+  margin-bottom:6px;
+  color:#c8c9d2;
   font-size:13px;
+  font-weight:700;
 }
 
 .seg textarea{
   min-height:72px;
 }
 
-/* ---------- PROJECTS ---------- */
+
+/* =========================================================
+   19. PROJECTS
+   ========================================================= */
 
 .project{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+
+  width:100%;
   min-height:68px;
-  border-radius:17px;
+  margin-top:8px;
   padding:12px 13px;
+
+  border-radius:17px;
+  border:1px solid rgba(255,255,255,.065);
+
+  background:rgba(255,255,255,.035);
 }
 
 .project b{
+  color:#f2f2f5;
   font-size:14px;
 }
 
-/* ---------- AUDIO / VOICE STUDIO ---------- */
+
+/* =========================================================
+   20. AUDIO / VOICE STUDIO
+   ========================================================= */
 
 .audio-box{
-  border-radius:20px;
+  width:100%;
   padding:14px;
+
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,.065);
+
   background:
     radial-gradient(
-      circle at 80% 20%,
-      rgba(168,85,247,.13),
+      circle at 80% 15%,
+      rgba(168,85,247,.16),
       transparent 42%
     ),
     linear-gradient(
@@ -251,53 +718,63 @@ button{
 }
 
 audio{
+  display:block;
+  width:100%;
   height:42px;
 }
 
-/* ---------- RANGE / VOLUME ---------- */
+
+/* =========================================================
+   21. RANGE / VOLUME
+   ========================================================= */
 
 .range-row{
-  grid-template-columns:1fr 38px;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 38px;
+  align-items:center;
+  gap:9px;
 }
 
-.range-row input[type=range]{
+.range-row input[type="range"]{
+  width:100%;
   height:5px;
+  padding:0;
+  border:0;
+  border-radius:999px;
+  background:rgba(255,255,255,.13);
+  box-shadow:none;
 }
 
-/* ---------- ADVANCED ---------- */
+.range-row input[type="range"]:focus{
+  box-shadow:none;
+}
+
+
+/* =========================================================
+   22. ADVANCED
+   ========================================================= */
 
 .advanced{
+  margin-top:10px;
+  padding:11px 12px;
+
+  border:1px solid rgba(255,255,255,.065);
   border-radius:15px;
+
+  background:rgba(255,255,255,.025);
 }
 
-/* ---------- BOTTOM NAV ---------- */
-
-.nav{
-  left:8px;
-  right:8px;
-  bottom:7px;
-  border-radius:22px;
-  padding:6px 5px
-    calc(6px + env(safe-area-inset-bottom));
+.advanced summary{
+  color:#b9bbc7;
+  font-size:12px;
+  font-weight:650;
+  cursor:pointer;
 }
 
-.nav button{
-  min-height:48px;
-  padding:6px 2px;
-  border-radius:15px;
-  font-size:10px;
-}
 
-.nav button.active{
-  background:
-    linear-gradient(
-      145deg,
-      rgba(168,85,247,.25),
-      rgba(59,130,246,.10)
-    );
-}
-
-/* ---------- SCRIPT PAGE ---------- */
+/* =========================================================
+   23. SCRIPT PAGE
+   ========================================================= */
 
 #scriptCard{
   border-radius:22px;
@@ -309,13 +786,89 @@ audio{
   line-height:1.7;
 }
 
-/* ---------- VOICE PAGE ---------- */
+
+/* =========================================================
+   24. VOICE PAGE
+   ========================================================= */
 
 #voicePage .card:first-child{
   border-radius:23px;
 }
 
-/* ---------- MOBILE ---------- */
+
+/* =========================================================
+   25. BOTTOM NAVIGATION
+   ========================================================= */
+
+.nav{
+  position:fixed;
+  z-index:1000;
+
+  left:8px;
+  right:8px;
+  bottom:7px;
+
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:4px;
+
+  padding:
+    6px 5px
+    calc(6px + env(safe-area-inset-bottom));
+
+  border-radius:23px;
+  border:1px solid rgba(255,255,255,.09);
+
+  background:
+    rgba(18,19,28,.88);
+
+  backdrop-filter:blur(22px);
+  -webkit-backdrop-filter:blur(22px);
+
+  box-shadow:
+    0 14px 45px rgba(0,0,0,.42);
+}
+
+.nav button{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  min-height:49px;
+  padding:6px 3px;
+
+  border:0;
+  border-radius:16px;
+
+  color:#858795;
+  background:transparent;
+
+  font-size:10px;
+  font-weight:650;
+}
+
+.nav button.active{
+  color:#fff;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(139,92,246,.27),
+      rgba(59,130,246,.12)
+    );
+
+  box-shadow:
+    inset 0 0 0 1px rgba(168,85,247,.12);
+}
+
+.nav button:active{
+  transform:scale(.96);
+}
+
+
+/* =========================================================
+   26. MOBILE — iPHONE
+   ========================================================= */
 
 @media(max-width:650px){
 
@@ -323,15 +876,40 @@ audio{
     max-width:430px;
     padding-left:11px;
     padding-right:11px;
-    padding-bottom:112px;
+    padding-bottom:120px;
   }
 
   .hero{
-    padding:19px 16px;
+    min-height:170px;
+    padding:20px 16px;
+    border-radius:23px;
   }
 
   .hero h1{
     font-size:27px;
+  }
+
+  .hero p{
+    font-size:13px;
+  }
+
+  .choice-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    gap:7px !important;
+  }
+
+  .choice{
+    min-height:102px;
+    padding:12px 7px;
+    border-radius:17px;
+  }
+
+  .choice b{
+    font-size:11.5px;
+  }
+
+  .choice span{
+    font-size:8.5px;
   }
 
   .card{
@@ -339,22 +917,8 @@ audio{
     border-radius:20px;
   }
 
-  .choice-grid{
-    grid-template-columns:repeat(3,1fr);
-    gap:7px;
-  }
-
-  .choice{
-    padding:12px 8px;
-    min-height:100px;
-  }
-
-  .choice b{
-    font-size:12px;
-  }
-
-  .choice span{
-    font-size:9px;
+  .card h2{
+    font-size:19px;
   }
 
   textarea{
@@ -364,10 +928,14 @@ audio{
   .nav{
     left:6px;
     right:6px;
+    bottom:6px;
   }
 }
 
-/* ---------- VERY SMALL iPHONES ---------- */
+
+/* =========================================================
+   27. VERY SMALL iPHONES
+   ========================================================= */
 
 @media(max-width:380px){
 
@@ -376,17 +944,22 @@ audio{
     padding-right:8px;
   }
 
+  .step{
+    padding:7px 7px;
+    font-size:10px;
+  }
+
   .choice-grid{
-    gap:5px;
+    gap:5px !important;
   }
 
   .choice{
-    padding:10px 6px;
-    min-height:92px;
+    min-height:94px;
+    padding:10px 5px;
   }
 
   .choice b{
-    font-size:11px;
+    font-size:10.5px;
   }
 
   .choice span{
@@ -397,13 +970,46 @@ audio{
     padding:13px;
   }
 
+  .grid{
+    grid-template-columns:1fr;
+  }
+
   .nav button{
+    min-height:47px;
     font-size:9px;
   }
 }
 
+
 /* =========================================================
-   END V16.2 REFINEMENT
+   28. SAFE AREA / iPHONE NOTCH
+   ========================================================= */
+
+@supports(padding:max(0px)){
+
+  .wrap{
+    padding-top:max(
+      env(safe-area-inset-top),
+      8px
+    );
+
+    padding-bottom:max(
+      120px,
+      calc(110px + env(safe-area-inset-bottom))
+    );
+  }
+
+  .nav{
+    bottom:max(
+      6px,
+      env(safe-area-inset-bottom)
+    );
+  }
+}
+
+
+/* =========================================================
+   END V16.3
    ========================================================= */
 </style>
 </head>
