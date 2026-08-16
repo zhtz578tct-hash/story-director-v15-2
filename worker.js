@@ -1069,7 +1069,12 @@ function esc(s){return String(s??"").replaceAll("&","&amp;").replaceAll("<","&lt
 function nameSafe(s){return String(s||"story").replace(/[^\w\u0900-\u097F-]+/g,"_").slice(0,50)||"story"}
 function downloadBlob(blob,name){const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=name||"story.wav";a.rel="noopener";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3000)}
 function setStep(n){currentStep=n;document.querySelectorAll(".step").forEach(x=>{const s=Number(x.dataset.step);x.classList.toggle("active",s===n);x.classList.toggle("done",s<n)});if(n===1)showPage("storyPage");if(n===2)showPage("storyPage");if(n===3)showPage("directorPage");if(n===4)showPage("voicePage")}
-function showPage(id){document.querySelectorAll(".page").forEach(x=>x.classList.add("hidden"));$(id).classList.remove("hidden");document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.nav===id));window.scrollTo({top:0,behavior:"smooth"})}
+function showPage(id){
+  document.querySelectorAll(".page").forEach(x=>x.classList.add("hidden"));
+  $(id).classList.remove("hidden");
+  document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.nav===id));
+  $(id).scrollIntoView({behavior:"smooth",block:"start"});
+}
 function syncPaste(){if(!$('pasteText').value.trim())return;$('story').value=$('pasteText').value.trim();$('language').value=$('pasteLanguage').value;$('downloadStory').disabled=false;$('scriptState').textContent="Pasted"}
 function projectData(){return {title:$('title').value||"Untitled Story",idea:$('idea').value,story:$('story').value,language:$('language').value,genre:$('genre').value,length:$('length').value,style:$('style').value,ageMode:$('ageMode').value,direction:$('direction').value,outputFormat:$('outputFormat').value,detected,updated:new Date().toISOString()}}
 function saveProject(){const p=projectData();const all=JSON.parse(localStorage.getItem("storyDirectorV16Projects")||"[]");const id=p.title+"|"+p.updated;all.unshift({id,title:p.title,updated:p.updated,data:p});localStorage.setItem("storyDirectorV16Projects",JSON.stringify(all.slice(0,30)));status("scriptStatus","ð¾ Project save à¤¹à¥ à¤à¤¯à¤¾ â","ok");renderProjects()}
