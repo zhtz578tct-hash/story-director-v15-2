@@ -205,7 +205,102 @@ function cleanSegmentForTTS(raw,speakerName,isNarrator){let t=String(raw??'').tr
 async function generateAudioFrom(index=0){if(!detected?.segments?.length)return;const segments=detected.segments;audioGeneration.running=true;audioGeneration.paused=false;$('generate').disabled=true;$('download').disabled=true;try{for(let i=index;i<segments.length;i++){audioGeneration.index=i;const s=segments[i]||{},speakerInfo=(detected.speakers||[]).find(x=>x.name===s.speaker)||{},role=String(speakerInfo.role||'').toLowerCase(),gender=String(speakerInfo.gender||'').toLowerCase(),isNarrator=role.includes('narrator')||role.includes('narration'),voice=s.voice||speakerInfo.voice||(isNarrator?'shimmer':gender==='female'?'nova':gender==='male'?'onyx':'alloy'),language=isNarrator?'Hindi':($('language').value||'Hindi'),speakerName=String(s.speaker||'').trim(),text=cleanSegmentForTTS(s.text||'',speakerName,isNarrator);if(!text)continue;status('progress','ðï¸ Segment '+(i+1)+' / '+segments.length+(document.hidden?'\nâ¸ï¸ Screen/background detected â generation will resume automatically.':''),'info');let success=false,lastError=null;for(let attempt=1;attempt<=3&&!success;attempt++){try{const r=await fetch('/api/tts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,voice,emotion:s.emotion||'neutral',emotion2:s.emotion2||'',intensity:s.intensity??50,delivery:s.delivery||'natural',pace:s.pace||'normal',pause:s.pause||'none',emphasis:s.emphasis||'normal',language})});if(!r.ok){const d=await r.json().catch(()=>({}));throw Error(d.error||('TTS error '+r.status))}const rawAudio=await r.arrayBuffer(),processedAudio=compressLongSilence(rawAudio),x=wavInfo(processedAudio);if(!x)throw Error('TTS à¤¨à¥ valid WAV audio à¤¨à¤¹à¥à¤ à¤²à¥à¤à¤¾à¤¯à¤¾à¥¤');if(!audioGeneration.fmt)audioGeneration.fmt={ch:x.ch,rate:x.rate,bits:x.bits};else if(x.ch!==audioGeneration.fmt.ch||x.rate!==audioGeneration.fmt.rate||x.bits!==audioGeneration.fmt.bits)throw Error('TTS segment à¤à¤¾ WAV format à¤à¤²à¤ à¤®à¤¿à¤²à¤¾à¥¤');if(i>0){const prev=segments[i-1],gapMs=prev?.speaker!==s?.speaker?350:25,bytesPerSecond=audioGeneration.fmt.rate*audioGeneration.fmt.ch*audioGeneration.fmt.bits/8;audioGeneration.parts.push(new Uint8Array(Math.max(0,Math.round(bytesPerSecond*gapMs/1000))))}audioGeneration.parts.push(x.data);success=true;status('progress','ðï¸ Segment '+(i+1)+' / '+segments.length+' â','info')}catch(e){lastError=e;if(document.hidden){audioGeneration.paused=true;status('progress','â¸ï¸ iPhone à¤¨à¥ background à¤®à¥à¤ generation à¤°à¥à¤ à¤¦à¥ à¤¹à¥.\nScreen à¤µà¤¾à¤ªà¤¸ ON à¤à¤°à¤¤à¥ à¤¹à¥ Segment '+(i+1)+' à¤¸à¥ automatically resume à¤¹à¥à¤à¤¾.','info');return}if(attempt<3){status('progress','â ï¸ Segment '+(i+1)+' temporarily failed.\nRetry '+attempt+'/3â¦','info');await new Promise(resolve=>setTimeout(resolve,1200*attempt))}}}if(!success){audioGeneration.paused=true;status('progress','â Segment '+(i+1)+' complete à¤¨à¤¹à¥à¤ à¤¹à¥ à¤¸à¤à¤¾.\n'+(lastError?.message||'Unknown TTS error')+'\n\nScreen ON à¤°à¤à¥à¤à¥¤','err');return}}if(!audioGeneration.fmt||!audioGeneration.parts.length)throw Error('à¤à¥à¤ audio segment à¤¤à¥à¤¯à¤¾à¤° à¤¨à¤¹à¥à¤ à¤¹à¥à¤à¥¤');finalBlob=wavBuild(audioGeneration.parts,audioGeneration.fmt);window.finalBlob=finalBlob;$('player').src=URL.createObjectURL(finalBlob);$('player').style.display='block';$('download').disabled=false;$('downloadMp3').disabled=true;$('downloadM4a').disabled=true;audioGeneration.running=false;audioGeneration.paused=false;status('progress','â à¤ªà¥à¤°à¤¾ WAV audio à¤¤à¥à¤¯à¤¾à¤° à¤¹à¥à¥¤','ok');setStep(4)}catch(e){audioGeneration.paused=true;status('progress','â '+(e.message||'Audio generation failed')+'\n\nScreen ON à¤à¤°à¤à¥ à¤¦à¥à¤¬à¤¾à¤°à¤¾ à¤à¥à¤¶à¤¿à¤¶ à¤à¤°à¥à¤.','err')}finally{audioGeneration.running=false;$('generate').disabled=false;$('resumeAudio').disabled=!audioGeneration.paused}}
 function tryResumeAudio(){if(audioResumeBusy||document.hidden||!audioGeneration.paused||audioGeneration.running||!detected?.segments?.length)return;audioResumeBusy=true;clearTimeout(audioResumeTimer);audioResumeTimer=setTimeout(()=>{try{if(!document.hidden&&audioGeneration.paused&&!audioGeneration.running){status('progress','â¶ï¸ Screen à¤µà¤¾à¤ªà¤¸ ON à¤¹à¥ à¤à¤¯à¤¾à¥¤ Segment '+(audioGeneration.index+1)+' à¤¸à¥ resume à¤¹à¥ à¤°à¤¹à¥ à¤¹à¥â¦','info');generateAudioFrom(audioGeneration.index)}}finally{audioResumeBusy=false}},700)}
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)tryResumeAudio()});window.addEventListener('pageshow',tryResumeAudio);window.addEventListener('focus',tryResumeAudio);
-$('generate').onclick=async()=>{if(!detected?.segments?.length)return;audioGeneration={running:false,paused:false,index:0,parts:[],fmt:null};finalBlob=null;await generateAudioFrom(0)};$('resumeAudio').onclick=()=>tryResumeAudio();$('download').onclick=()=>{if(finalBlob)downloadBlob(finalBlob,nameSafe($('title').value||'story')+'-audio.wav')};$('downloadMp3').onclick=()=>status('progress','MP3 export à¤à¤­à¥ backend encoder à¤à¥ à¤¬à¤¿à¤¨à¤¾ à¤à¤ªà¤²à¤¬à¥à¤§ à¤¨à¤¹à¥à¤ à¤¹à¥à¥¤ WAV à¤à¥ source master à¤à¥ à¤¤à¤°à¤¹ à¤°à¤à¤¾ à¤à¤¯à¤¾ à¤¹à¥à¥¤','info');$('downloadM4a').onclick=()=>status('progress','M4A export à¤à¤­à¥ backend encoder à¤à¥ à¤¬à¤¿à¤¨à¤¾ à¤à¤ªà¤²à¤¬à¥à¤§ à¤¨à¤¹à¥à¤ à¤¹à¥à¥¤','info');$('previewAllVoices').onclick=()=>{const s=detected?.speakers?.[0];if(!s)return status('progress','à¤ªà¤¹à¤²à¥ speakers detect à¤à¤°à¥à¤à¥¤','err');const b=document.querySelector('.voicePreview');if(b)previewVoice(s.voice||defaultVoice(s),b)};
+$('generate').onclick=async()=>{
+  try{
+    if(!detected?.segments?.length){
+      status(
+        'progress',
+        '❌ पहले "Detect Speakers & Emotions" चलाएँ। कोई audio segment तैयार नहीं है।',
+        'err'
+      );
+      return;
+    }
+
+    audioGeneration={
+      running:false,
+      paused:false,
+      index:0,
+      parts:[],
+      fmt:null
+    };
+
+    finalBlob=null;
+
+    status(
+      'progress',
+      '🎙️ Audio generation शुरू हो रही है…',
+      'info'
+    );
+
+    await generateAudioFrom(0);
+
+  }catch(e){
+    console.error('Generate Audio Error:',e);
+
+    audioGeneration.paused=true;
+
+    status(
+      'progress',
+      '❌ Audio generation शुरू नहीं हो सकी।\n\n'+
+      (e?.message||String(e)),
+      'err'
+    );
+
+  }finally{
+    $('generate').disabled=false;
+  }
+};
+
+$('resumeAudio').onclick=()=>{
+  tryResumeAudio();
+};
+
+$('download').onclick=()=>{
+  if(finalBlob){
+    downloadBlob(
+      finalBlob,
+      nameSafe($('title').value||'story')+'-audio.wav'
+    );
+  }
+};
+
+$('downloadMp3').onclick=()=>{
+  status(
+    'progress',
+    'MP3 export अभी backend encoder के बिना उपलब्ध नहीं है। WAV को source master की तरह रखा गया है।',
+    'info'
+  );
+};
+
+$('downloadM4a').onclick=()=>{
+  status(
+    'progress',
+    'M4A export अभी backend encoder के बिना उपलब्ध नहीं है।',
+    'info'
+  );
+};
+
+$('previewAllVoices').onclick=()=>{
+  const s=detected?.speakers?.[0];
+
+  if(!s){
+    status(
+      'progress',
+      'पहले speakers detect करें।',
+      'err'
+    );
+    return;
+  }
+
+  const b=document.querySelector('.voicePreview');
+
+  if(b){
+    previewVoice(
+      s.voice||defaultVoice(s),
+      b
+    );
+  }
+};
 $('pasteText').addEventListener('input',()=>{$('scriptState').textContent='Draft'});$('story').addEventListener('input',()=>{$('downloadStory').disabled=!$('story').value.trim();$('scriptState').textContent='Edited'});
 window.addEventListener('beforeunload',()=>{try{localStorage.setItem('storyDirectorV16Draft',JSON.stringify(projectData()))}catch{}});restore();renderProjects();
 </script>
