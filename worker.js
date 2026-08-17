@@ -646,6 +646,96 @@ body{
 body{
   padding-bottom:env(safe-area-inset-bottom);
 }
+/* =========================================================
+   V16.2 — Transparent Choice & Bottom Navigation
+   UI ONLY — functionality untouched
+   ========================================================= */
+
+/* Home screen choice buttons */
+.choice{
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+  color:#6c63ff !important;
+  border-radius:0 !important;
+  padding:10px 8px !important;
+}
+
+/* Choice button hover / active */
+.choice:hover,
+.choice:active,
+.choice:focus{
+  background:rgba(108,99,255,.08) !important;
+  border:0 !important;
+  box-shadow:none !important;
+}
+
+/* Remove any white inner background */
+.choice::before,
+.choice::after{
+  background:transparent !important;
+  box-shadow:none !important;
+}
+
+/* Keep emoji / symbol visible */
+.choice b{
+  color:inherit !important;
+}
+
+/* =========================================================
+   Bottom navigation
+   ========================================================= */
+
+.bottom-nav{
+  background:rgba(11,13,18,.88) !important;
+  border:0 !important;
+  box-shadow:none !important;
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+}
+
+/* Navigation buttons */
+.bottom-nav button,
+.bottom-nav .nav-item,
+.bottom-nav a{
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+  color:#6c63ff !important;
+  border-radius:0 !important;
+}
+
+/* Navigation active state */
+.bottom-nav button.active,
+.bottom-nav .nav-item.active,
+.bottom-nav a.active{
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+  color:#6c63ff !important;
+}
+
+/* Navigation hover / tap */
+.bottom-nav button:hover,
+.bottom-nav button:active,
+.bottom-nav .nav-item:hover,
+.bottom-nav .nav-item:active,
+.bottom-nav a:hover,
+.bottom-nav a:active{
+  background:rgba(108,99,255,.08) !important;
+  box-shadow:none !important;
+}
+
+/* =========================================================
+   Safety: prevent accidental white background
+   ========================================================= */
+
+.choice *,
+.bottom-nav *,
+.bottom-nav button *,
+.bottom-nav .nav-item *{
+  box-shadow:none !important;
+}
 </style>
 </head>
 <body>
