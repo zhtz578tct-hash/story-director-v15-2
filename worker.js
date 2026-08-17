@@ -1049,7 +1049,7 @@ audio{
 </section>
 
 <section id="directorPage" class="page hidden">
-<div class="card"><h2>ð­ Director</h2><div class="check"><input type="checkbox" id="emotion" checked><span>Automatic Emotion Detection</span></div><div class="check"><input type="checkbox" id="adult"><span>ð 21+ Mature Mode</span></div><button class="primary" id="analyze">ð­ Detect Speakers & Emotions</button><div id="status" class="status"></div></div>
+<div class="card"><h2>🎭 Director</h2><div class="check"><input type="checkbox" id="emotion" checked><span>Automatic Emotion Detection</span></div><div class="check" id="adult" role="button" aria-pressed="false" tabindex="0"><span>🔞 21+ Mature Mode OFF</span></div><button class="primary" id="analyze">🎭 Detect Speakers & Emotions</button><div id="status" class="status"></div></div>
 <div class="card"><div class="section-title"><h2>ðï¸ Speaker Manager</h2><span class="pill" id="speakerCount">0 speakers</span></div><div id="speakers" class="empty">à¤à¤­à¥ speakers detect à¤¨à¤¹à¥à¤ à¤¹à¥à¤ à¤¹à¥à¤à¥¤</div></div>
 <div class="card"><div class="section-title"><h2>ð Segments</h2><span class="small">à¤¹à¤° line à¤à¥ edit/preview à¤à¤° à¤¸à¤à¤¤à¥ à¤¹à¥à¤</span></div><div id="segments" class="empty">Analysis à¤à¥ à¤¬à¤¾à¤¦ segments à¤¯à¤¹à¤¾à¤ à¤à¤à¤à¤à¥à¥¤</div></div>
 </section>
