@@ -37,7 +37,7 @@ const HTML = String.raw`<!doctype html>
   box-shadow: none !important;
 }
 
-/* Compact segment header */
+/* ---------- Compact segment header ---------- */
 
 [class*="segment-card"] > div:first-child,
 [class*="speaker-card"] > div:first-child {
@@ -77,7 +77,7 @@ const HTML = String.raw`<!doctype html>
   font-size: 14px !important;
 }
 
-/* Keep action buttons compact */
+/* ---------- Keep action buttons compact ---------- */
 
 [class*="segment-card"] button {
   margin-top: 6px !important;
@@ -121,7 +121,7 @@ const HTML = String.raw`<!doctype html>
   -webkit-backdrop-filter: blur(18px);
 }
 
-/* Toolbar buttons */
+/* ---------- Toolbar buttons ---------- */
 
 .director-batch-toolbar button,
 #directorBatchToolbar button,
@@ -146,50 +146,6 @@ const HTML = String.raw`<!doctype html>
   border-radius: 12px;
   font-size: 13px;
   font-weight: 700;
-}
-
-/* ---------- Mobile / iPhone ---------- */
-
-@media (max-width: 600px) {
-
-  [class*="segment-card"],
-  [class*="speaker-card"],
-  [class*="dialogue-card"] {
-    padding: 10px !important;
-    border-radius: 14px !important;
-  }
-
-  [class*="segment-card"] textarea,
-  [class*="speaker-card"] textarea {
-    font-size: 16px !important;
-    min-height: 54px !important;
-  }
-
-  [class*="segment-card"] button,
-  [class*="speaker-card"] button {
-    min-height: 40px !important;
-    font-size: 13px !important;
-  }
-
-  .director-batch-toolbar,
-  #directorBatchToolbar,
-  [data-director-toolbar] {
-    overflow-x: auto;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .director-batch-toolbar::-webkit-scrollbar,
-  #directorBatchToolbar::-webkit-scrollbar,
-  [data-director-toolbar]::-webkit-scrollbar {
-    display: none;
-  }
-
-  .director-batch-toolbar button,
-  #directorBatchToolbar button,
-  [data-director-toolbar] button {
-    flex: 0 0 auto;
-  }
 }
 
 /* ---------- Generation states ---------- */
@@ -247,6 +203,50 @@ textarea {
 
 button {
   touch-action: manipulation;
+}
+
+/* ---------- Mobile / iPhone ---------- */
+
+@media (max-width: 600px) {
+
+  [class*="segment-card"],
+  [class*="speaker-card"],
+  [class*="dialogue-card"] {
+    padding: 10px !important;
+    border-radius: 14px !important;
+  }
+
+  [class*="segment-card"] textarea,
+  [class*="speaker-card"] textarea {
+    font-size: 16px !important;
+    min-height: 54px !important;
+  }
+
+  [class*="segment-card"] button,
+  [class*="speaker-card"] button {
+    min-height: 40px !important;
+    font-size: 13px !important;
+  }
+
+  .director-batch-toolbar,
+  #directorBatchToolbar,
+  [data-director-toolbar] {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .director-batch-toolbar::-webkit-scrollbar,
+  #directorBatchToolbar::-webkit-scrollbar,
+  [data-director-toolbar]::-webkit-scrollbar {
+    display: none;
+  }
+
+  .director-batch-toolbar button,
+  #directorBatchToolbar button,
+  [data-director-toolbar] button {
+    flex: 0 0 auto;
+  }
 }
 </style>
 </head>
