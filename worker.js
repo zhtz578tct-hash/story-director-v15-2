@@ -1041,7 +1041,7 @@ audio{
 <div class="card" id="pasteCard">
 <h2>ð Paste Story</h2><label>à¤à¤ªà¤¨à¥ à¤ªà¥à¤°à¥ à¤à¤¹à¤¾à¤¨à¥ / script</label><textarea id="pasteText" placeholder="à¤¯à¤¹à¤¾à¤ à¤à¤ªà¤¨à¥ existing à¤à¤¹à¤¾à¤¨à¥ paste à¤à¤°à¥à¤â¦"></textarea>
 <div class="grid"><div><label>Language / Dialect</label><select id="pasteLanguage"><option>Hindi</option><option>Bhojpuri</option><option>Purvanchali / Banarasi</option><option>Urdu</option><option>English</option></select></div><div><label>Processing Mode</label><select id="processMode"><option value="full">ð¬ Full Director Mode</option><option value="dialogue">ðï¸ Dialogue + Narration</option><option value="dialogue-only">ð¬ Dialogue Only</option></select></div></div>
-<button class="primary" id="usePaste" style="margin-top:15px">ð­ Analyze This Story</button>
+<button type="button" class="primary" id="usePaste" style="margin-top:15px">ð­ Analyze This Story</button>
 </div>
 
 <div class="card" id="scriptCard"><div class="section-title"><h2>ð Script</h2><span class="pill" id="scriptState">Draft</span></div><label>Title</label><input id="title" placeholder="Story title"><label>Story / Script</label><textarea id="story" placeholder="Generated à¤¯à¤¾ pasted story à¤¯à¤¹à¤¾à¤ à¤à¤à¤à¥â¦"></textarea>
