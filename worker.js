@@ -3,8 +3,23 @@ const HTML = String.raw`<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b0d12">
 <title>Story Director V16.1</title>
 <style>
+:root{
+  --app-bg:#0b0d12;
+  --card-bg:#151922;
+  --card-border:rgba(255,255,255,.08);
+  --text-main:#f5f7fb;
+  --text-muted:#9aa3b2;
+  --accent:#6c63ff;
+  --accent-2:#8b7cff;
+}
+
+html,body{
+  background:var(--app-bg);
+  color:var(--text-main);
+}
 /* =========================================================
    STORY DIRECTOR V16.2 — COMPACT DIRECTOR / SEGMENT UI
    Purpose:
@@ -247,6 +262,113 @@ button {
   [data-director-toolbar] button {
     flex: 0 0 auto;
   }
+}
+/* ===== MODERN APP CARDS ===== */
+
+.card{
+  background:linear-gradient(
+    145deg,
+    rgba(24,28,38,.98),
+    rgba(15,18,25,.98)
+  ) !important;
+  border:1px solid rgba(255,255,255,.08) !important;
+  border-radius:20px !important;
+  box-shadow:
+    0 10px 30px rgba(0,0,0,.22),
+    inset 0 1px 0 rgba(255,255,255,.035) !important;
+}
+
+.card h2,
+.card h3,
+.card h4{
+  color:#f5f7fb;
+  letter-spacing:-.2px;
+}
+
+.card label{
+  color:#aeb6c5;
+  font-weight:600;
+}
+
+.card input,
+.card textarea,
+.card select{
+  background:#0f131b !important;
+  color:#f5f7fb !important;
+  border:1px solid rgba(255,255,255,.09) !important;
+  border-radius:14px !important;
+  outline:none;
+}
+
+.card input:focus,
+.card textarea:focus,
+.card select:focus{
+  border-color:rgba(108,99,255,.75) !important;
+  box-shadow:0 0 0 3px rgba(108,99,255,.12);
+}
+/* ===== MODERN APP BUTTONS ===== */
+
+button{
+  border:0;
+  border-radius:14px !important;
+  min-height:46px;
+  padding:0 18px;
+  font-weight:700;
+  letter-spacing:.1px;
+  transition:
+    transform .15s ease,
+    box-shadow .15s ease,
+    opacity .15s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+
+button:active{
+  transform:scale(.97);
+}
+
+button:not(:disabled){
+  cursor:pointer;
+}
+
+button:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
+
+button.primary,
+button#generateStory,
+button#generate{
+  background:linear-gradient(
+    135deg,
+    #6c63ff,
+    #8b7cff
+  ) !important;
+  color:#fff !important;
+  box-shadow:
+    0 8px 20px rgba(108,99,255,.25);
+}
+
+button.primary:hover,
+button#generateStory:hover,
+button#generate:hover{
+  box-shadow:
+    0 10px 26px rgba(108,99,255,.35);
+}
+
+button.secondary{
+  background:#202633 !important;
+  color:#e8ebf2 !important;
+  border:1px solid rgba(255,255,255,.08) !important;
+}
+
+button.secondary:hover{
+  background:#293141 !important;
+}
+
+button.danger{
+  background:rgba(220,70,70,.12) !important;
+  color:#ff8d8d !important;
+  border:1px solid rgba(255,90,90,.18) !important;
 }
 </style>
 </head>
@@ -652,7 +774,7 @@ function defaultServerVoice(s){
 
   if(role.includes("narrator")||role.includes("narration")) return "onyx";
   if(gender==="female") return "nova";
-  if(gender==="male") return "onyx";
+  if(gender==="male") return "alloy";
 
   return "alloy";
 }
