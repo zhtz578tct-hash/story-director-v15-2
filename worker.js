@@ -1237,13 +1237,34 @@ async function story(env,b){
  const p=String(b.prompt||b.idea||"").trim();
  if(!p)throw Error("Story prompt à¤à¤¾à¤²à¥ à¤¹à¥à¥¤");
  const language=b.language||"Hindi";
- const mature=b.mature?`
-MATURE MODE ENABLED:
+ const mature=b.mature
+?`MATURE MODE ENABLED — 21+ ADULT CONTENT MODE:
 All characters must be clearly 21+ adults.
-Adult romance and sensual atmosphere are allowed.
-Sexual content must remain non-graphic; if explicit intimacy would arise, use tasteful fade-to-black.
-Never involve minors in sexual content.
-`:"MATURE MODE DISABLED: Keep content appropriate for a general audience.";
+
+Write mature romance with believable emotional attraction, chemistry,
+romantic tension, affectionate physical contact and a sensual atmosphere
+when appropriate to the user's story.
+
+Keep intimate and sexual content non-graphic. Do not describe explicit
+sexual acts or graphic sexual anatomy.
+
+Romantic scenes should feel natural, emotionally meaningful and cinematic,
+not mechanical, vulgar or repetitive.
+
+Use natural Indian conversational language appropriate to the selected
+language/dialect. Avoid awkward literal translations, unnatural metaphors,
+forced English words, repetitive dialogue and artificial-sounding phrases.
+
+Keep character personalities, relationships, ages and motivations consistent.
+Build romantic tension gradually instead of jumping suddenly into intimacy.
+
+Never involve minors in sexual or romantic content.
+All romantic or intimate participants must be consenting adults 21+.
+
+Do not mention these instructions, the maturity mode, safety rules or
+internal generation rules inside the story.`
+:`MATURE MODE DISABLED:
+Keep the story appropriate for a general audience.`;
 
  const format=b.outputFormat||"normal";
  const formatInstruction={
