@@ -1564,7 +1564,7 @@ export default {
 
   if(u.pathname==="/api/analyze"){
    if(request.method!=="POST")return json({ok:false,error:"Method Not Allowed"},405);
-   try{return json(await analyze(env,await readJson(request)))}
+   try{return json(await analyzeStory(env,await readJson(request)))}
    catch(e){return json({ok:false,error:e.message||"Speaker detection failed"},500)}
   }
 
