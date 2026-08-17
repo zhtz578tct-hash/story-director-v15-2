@@ -1324,7 +1324,7 @@ Keep the story appropriate for a general audience.`;
     "If the input story is pasted by the user, preserve the user's story text exactly as provided.",
 "Do not rewrite, sanitize, censor, summarize, moralize, or remove story content during analysis.",
 "Analysis must only identify speakers, roles, emotions, delivery, pace, and segments.",
-"The original pasted text must remain unchanged.
+"The original pasted text must remain unchanged.",
     "Use narrator only for narration, scene description and non-dialogue text.",
   "Every spoken dialogue must belong to the correct character.",
   "Voice defaults: narrator=shimmer, male=onyx, female=nova, unknown=alloy.",
