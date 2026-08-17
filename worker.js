@@ -1049,7 +1049,7 @@ audio{
 </section>
 
 <section id="directorPage" class="page hidden">
-<div class="card"><h2>&#127917; Director</h2><div class="check"><input type="checkbox" id="emotion" checked><span>Automatic Emotion Detection</span></div><div class="check" id="adult" role="button" aria-pressed="false" tabindex="0"><span>&#128286; 21+ Mature Mode OFF</span></div><button class="primary" id="analyze">&#127917; Detect Speakers &amp; Emotions</button><div id="status" class="status"></div></div>
+<div class="card"><h2>&#127917; Director</h2><div class="check"><input type="checkbox" id="emotion" checked><span>Automatic Emotion Detection</span></div><div class="check"><button type="button" id="adult" class="mature-toggle" aria-pressed="false">&#128286; 21+ Mature Mode OFF</button></div><button class="primary" id="analyze">&#127917; Detect Speakers &amp; Emotions</button><div id="status" class="status"></div></div>
 <div class="card"><div class="section-title"><h2>ðï¸ Speaker Manager</h2><span class="pill" id="speakerCount">0 speakers</span></div><div id="speakers" class="empty">à¤à¤­à¥ speakers detect à¤¨à¤¹à¥à¤ à¤¹à¥à¤ à¤¹à¥à¤à¥¤</div></div>
 <div class="card"><div class="section-title"><h2>ð Segments</h2><span class="small">à¤¹à¤° line à¤à¥ edit/preview à¤à¤° à¤¸à¤à¤¤à¥ à¤¹à¥à¤</span></div><div id="segments" class="empty">Analysis à¤à¥ à¤¬à¤¾à¤¦ segments à¤¯à¤¹à¤¾à¤ à¤à¤à¤à¤à¥à¥¤</div></div>
 </section>
@@ -1067,27 +1067,33 @@ const $=id=>document.getElementById(id);let detected=null;let currentStep=1;let 
 let matureMode = false;
 
 function updateMatureMode(){
-  const el = $('adult');
+  const el = document.querySelector('.mature-toggle');
   if(!el) return;
 
   matureMode = !matureMode;
 
-  el.classList.toggle('active', matureMode);
   el.setAttribute('aria-pressed', String(matureMode));
 
-  const span = el.querySelector('span');
-  if(span){
-    span.textContent = matureMode
-      ? '🔞 21+ Mature Mode ON'
-      : '🔞 21+ Mature Mode OFF';
-  }
+  el.innerHTML = matureMode
+    ? '<span>&#128286; 21+ Mature Mode ON</span>'
+    : '<span>&#128286; 21+ Mature Mode OFF</span>';
 }
-document.addEventListener('DOMContentLoaded',()=>{
-  const adult=$('adult');
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  const adult = document.querySelector('.mature-toggle');
+
   if(adult){
     adult.setAttribute('role','button');
     adult.setAttribute('aria-pressed','false');
-    adult.addEventListener('click',updateMatureMode);
+
+    adult.addEventListener('click', updateMatureMode);
+
+    adult.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter' || e.key === ' '){
+        e.preventDefault();
+        updateMatureMode();
+      }
+    });
   }
 });
 function status(id,text,type=""){const e=$(id);if(!e)return;e.textContent=text;e.className="status show "+type}
