@@ -1313,10 +1313,6 @@ Keep the story appropriate for a general audience.`;
  return ai(env,instructions,p);
 }
 
-Voice defaults: narrator=onyx, male=alloy, female=nova.
-Narrator MUST always use onyx.
-Male characters MUST NEVER use onyx.
-Female characters MUST use nova unless explicitly changed later by the user.
  const s=String(b.story||"").trim();
  if(!s)throw Error("Story à¤à¤¾à¤²à¥ à¤¹à¥à¥¤");
 
