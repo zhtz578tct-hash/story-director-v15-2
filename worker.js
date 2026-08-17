@@ -1120,7 +1120,66 @@ $('generateStory').onclick=async()=>{const idea=$('idea').value.trim();if(!idea)
 $('usePaste').onclick=(e)=>{e.preventDefault();e.stopPropagation();const t=$('pasteText').value.trim();if(!t){status('storyStatus','पहले कहानी paste कीजिए।','err');return}syncPaste();setStep(2);setTimeout(()=>{$('analyze').click()},350)};
 $('downloadStory').onclick=()=>downloadBlob(new Blob([$('title').value+'\n\n'+$('story').value],{type:'text/plain;charset=utf-8'}),nameSafe($('title').value)+'.txt');$('saveLocal').onclick=saveProject;
 $('clearAll').onclick=()=>{if(!confirm('à¤ªà¥à¤°à¤¾ current project à¤¸à¤¾à¤«à¤¼ à¤à¤°à¥à¤?'))return;['idea','title','story','direction','pasteText'].forEach(x=>$(x).value='');detected=null;finalBlob=null;audioGeneration={running:false,paused:false,index:0,parts:[],fmt:null};$('downloadStory').disabled=true;$('generate').disabled=true;$('speakers').innerHTML='à¤à¤­à¥ speakers detect à¤¨à¤¹à¥à¤ à¤¹à¥à¤ à¤¹à¥à¤à¥¤';$('segments').innerHTML='Analysis à¤à¥ à¤¬à¤¾à¤¦ segments à¤¯à¤¹à¤¾à¤ à¤à¤à¤à¤à¥à¥¤';$('player').style.display='none';$('download').disabled=true;$('downloadMp3').disabled=true;$('downloadM4a').disabled=true;setStep(1);status('scriptStatus','à¤¸à¤¾à¤«à¤¼ à¤à¤° à¤¦à¤¿à¤¯à¤¾ à¤à¤¯à¤¾à¥¤','ok')};
-$('analyze').onclick=async()=>{const story=$('story').value.trim();if(!story){status('status','पहले कहानी लिखिए या Paste Story करें।','err');showPage('storyPage');setStep(2);return}const b=$('analyze');b.disabled=true;const old=b.textContent;b.textContent='⏳ Analysis...';status('status','Speakers और emotions पहचाने जा रहे हैं…','info');try{const r=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({story,language:$('language').value,emotion:$('emotion').checked,mature:$('adult').checked})});const d=await r.json().catch(()=>({}));if(!r.ok||!d.ok)throw Error(d.error||('Server error: '+r.status));detected=d;renderSpeakers();renderSegments();$('generate').disabled=!(d.segments&&d.segments.length);status('status','✅ Speaker + emotion detection complete.','ok');showPage('directorPage');setStep(3);setTimeout(()=>{$('directorPage').scrollIntoView({behavior:'smooth',block:'start'})},50)}catch(e){status('status','❌ '+e.message,'err')}finally{b.disabled=false;b.textContent=old||'🎭 Detect Speakers & Emotions'}};
+$('analyze').onclick=async()=>{
+  const story=$('story').value.trim();
+
+  if(!story){
+    status('status','पहले कहानी लिखिए या Paste Story करें।','err');
+    showPage('storyPage');
+    setStep(2);
+    return;
+  }
+
+  const b=$('analyze');
+  b.disabled=true;
+
+  const old=b.textContent;
+  b.textContent='⏳ Analysis...';
+
+  status('status','Speakers और emotions पहचाने जा रहे हैं…','info');
+
+  try{
+    const r=await fetch('/api/analyze',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        story,
+        language:$('language').value,
+        emotion:$('emotion').checked,
+        mature:$('adult').checked
+      })
+    });
+
+    const d=await r.json().catch(()=>({}));
+
+    if(!r.ok||!d.ok){
+      throw Error(d.error||('Server error: '+r.status));
+    }
+
+    detected=d;
+
+    renderSpeakers();
+    renderSegments();
+
+    $('generate').disabled=!(d.segments&&d.segments.length);
+
+    status(
+      'status',
+      '✅ Speaker + emotion detection complete.',
+      'ok'
+    );
+
+    showPage('directorPage');
+    setStep(3);
+
+  }catch(e){
+    status('status','❌ '+e.message,'err');
+
+  }finally{
+    b.disabled=false;
+    b.textContent=old||'🎭 Detect Speakers & Emotions';
+  }
+};
 function defaultVoice(s){const role=String(s.role||'').toLowerCase();if(role.includes('narrator')||role.includes('narration'))return 'onyx';if(role.includes('female'))return 'nova';if(role.includes('male'))return 'alloy';return 'alloy'}
 function voiceOption(v,label,current){return '<option value="'+v+'"'+(current===v?' selected':'')+'>'+label+'</option>'}
 async function previewVoice(voice,button,text){const old=button.textContent;button.disabled=true;button.textContent='â³ à¤¸à¥à¤¨ à¤°à¤¹à¥ à¤¹à¥à¤...';try{const r=await fetch('/api/tts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:text||'à¤¨à¤®à¤¸à¥à¤à¤¾à¤°à¥¤ à¤¯à¤¹ à¤à¤¸ à¤à¤µà¤¾à¤à¤¼ à¤à¤¾ à¤ªà¤°à¥à¤à¥à¤·à¤£ à¤¹à¥à¥¤',voice,emotion:'neutral',intensity:20,delivery:'calm',pace:'normal',pause:'none',language:$('language').value})});if(!r.ok){const d=await r.json().catch(()=>({}));throw Error(d.error||('Preview error '+r.status))}const blob=await r.blob(),url=URL.createObjectURL(blob),audio=new Audio(url);audio.onended=()=>URL.revokeObjectURL(url);await audio.play()}catch(e){status('status','â Voice preview: '+e.message,'err')}finally{button.disabled=false;button.textContent=old}}
