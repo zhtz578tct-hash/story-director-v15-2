@@ -370,6 +370,282 @@ button.danger{
   color:#ff8d8d !important;
   border:1px solid rgba(255,90,90,.18) !important;
 }
+/* =========================================================
+   STORY DIRECTOR V16.2 — MODERN iPHONE UI
+   UI ONLY — existing JavaScript/API functionality untouched
+   ========================================================= */
+
+/* ---------- Compact App Header ---------- */
+.topbar{
+  margin:0 -1px 6px !important;
+  padding:3px 2px 6px !important;
+  min-height:34px;
+  display:flex;
+  align-items:center;
+}
+
+.brand{
+  font-size:18px !important;
+  font-weight:800 !important;
+  letter-spacing:-.25px !important;
+  line-height:1.1 !important;
+}
+
+/* ---------- Main workflow ---------- */
+.stepper{
+  display:grid !important;
+  grid-template-columns:repeat(4,1fr);
+  gap:5px !important;
+  margin:0 0 8px !important;
+  padding:3px 0 !important;
+  top:43px !important;
+}
+
+.step{
+  min-height:34px;
+  padding:8px 4px !important;
+  border-radius:10px !important;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  font-size:11px !important;
+  font-weight:700 !important;
+  white-space:nowrap;
+  cursor:pointer;
+  touch-action:manipulation;
+  transition:transform .15s ease,background .15s ease;
+}
+
+.step:active{
+  transform:scale(.96);
+}
+
+.step.active{
+  box-shadow:0 5px 14px rgba(0,0,0,.12) !important;
+}
+
+/* ---------- Compact hero ---------- */
+.hero{
+  padding:15px 13px !important;
+  margin-bottom:9px !important;
+  border-radius:18px !important;
+}
+
+.hero h1{
+  font-size:21px !important;
+  line-height:1.18 !important;
+  letter-spacing:-.45px !important;
+  margin:4px 0 5px !important;
+}
+
+.hero p{
+  font-size:13px !important;
+  line-height:1.4 !important;
+  margin:0 !important;
+}
+
+/* ---------- Modern compact cards ---------- */
+.card{
+  padding:13px !important;
+  margin-bottom:9px !important;
+  border-radius:17px !important;
+}
+
+.card h2{
+  font-size:20px !important;
+  line-height:1.2 !important;
+  letter-spacing:-.25px !important;
+  margin:0 0 8px !important;
+}
+
+.card h3{
+  font-size:16px !important;
+  line-height:1.25 !important;
+  margin:7px 0 5px !important;
+}
+
+.card label{
+  display:block;
+  font-size:13px !important;
+  line-height:1.25 !important;
+  margin:7px 0 4px !important;
+  font-weight:650 !important;
+}
+
+/* ---------- Inputs ---------- */
+.card input,
+.card select,
+.card textarea{
+  width:100%;
+  box-sizing:border-box;
+  font-size:14px !important;
+  line-height:1.4 !important;
+  border-radius:11px !important;
+}
+
+.card input,
+.card select{
+  min-height:40px !important;
+  padding:8px 10px !important;
+}
+
+.card textarea{
+  padding:9px 10px !important;
+  min-height:120px !important;
+}
+
+/* ---------- Compact grids ---------- */
+.grid,
+.three{
+  gap:7px !important;
+}
+
+@media(max-width:650px){
+  .grid,
+  .three{
+    grid-template-columns:1fr !important;
+  }
+}
+
+/* ---------- Buttons ---------- */
+button{
+  min-height:42px !important;
+  padding:0 13px !important;
+  border-radius:11px !important;
+  font-size:14px !important;
+  font-weight:700 !important;
+}
+
+.choice{
+  min-height:58px !important;
+  padding:11px 12px !important;
+}
+
+.choice b{
+  font-size:14px !important;
+}
+
+.choice span{
+  font-size:12px !important;
+  line-height:1.3 !important;
+}
+
+/* ---------- Helper / status text ---------- */
+.small,
+.status,
+.hint,
+.help,
+.muted{
+  font-size:12px !important;
+  line-height:1.35 !important;
+}
+
+/* ---------- Reduce unnecessary vertical spacing ---------- */
+.card > p{
+  margin:5px 0 !important;
+}
+
+.card > div{
+  margin-top:7px;
+}
+
+details{
+  margin-top:7px !important;
+}
+
+details summary{
+  font-size:13px !important;
+  padding:8px 0 !important;
+}
+
+/* ---------- Single-column iPhone layout ---------- */
+@media(max-width:650px){
+
+  .wrap{
+    max-width:760px !important;
+    padding:6px 9px 96px !important;
+  }
+
+  .topbar{
+    padding:3px 1px 5px !important;
+  }
+
+  .brand{
+    font-size:18px !important;
+  }
+
+  .hero{
+    padding:14px 12px !important;
+    border-radius:17px !important;
+  }
+
+  .hero h1{
+    font-size:20px !important;
+  }
+
+  .hero p{
+    font-size:13px !important;
+  }
+
+  .card{
+    padding:12px !important;
+    border-radius:16px !important;
+  }
+
+  .card h2{
+    font-size:19px !important;
+  }
+
+  .step{
+    font-size:10px !important;
+    min-height:33px;
+    padding:7px 2px !important;
+  }
+
+  .card textarea{
+    min-height:115px !important;
+    font-size:14px !important;
+  }
+
+  button{
+    min-height:42px !important;
+    font-size:14px !important;
+  }
+}
+
+/* ---------- Touch optimization ---------- */
+button,
+.step,
+select,
+input,
+textarea{
+  -webkit-tap-highlight-color:transparent;
+}
+
+button,
+.step{
+  touch-action:manipulation;
+}
+
+/* ---------- Prevent iOS horizontal overflow ---------- */
+html,
+body{
+  max-width:100%;
+  overflow-x:hidden;
+}
+
+.wrap,
+.card,
+.hero{
+  max-width:100%;
+  box-sizing:border-box;
+}
+
+/* ---------- Safe bottom space for fixed navigation ---------- */
+body{
+  padding-bottom:env(safe-area-inset-bottom);
+}
 </style>
 </head>
 <body>
