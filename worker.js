@@ -1064,6 +1064,32 @@ audio{
 <nav class="nav"><button data-nav="home" class="active">ð <br>Home</button><button data-nav="storyPage">âï¸<br>Story</button><button data-nav="directorPage">ð­<br>Director</button><button data-nav="voicePage">ðï¸<br>Voice</button><button data-nav="projectsPage">ð<br>Projects</button></nav>
 <script>
 const $=id=>document.getElementById(id);let detected=null;let currentStep=1;let finalBlob=null;let audioGeneration={running:false,paused:false,index:0,parts:[],fmt:null};let audioResumeTimer=null,audioResumeBusy=false;
+let matureMode = false;
+
+function updateMatureMode(){
+  const el = $('adult');
+  if(!el) return;
+
+  matureMode = !matureMode;
+
+  el.classList.toggle('active', matureMode);
+  el.setAttribute('aria-pressed', String(matureMode));
+
+  const span = el.querySelector('span');
+  if(span){
+    span.textContent = matureMode
+      ? '🔞 21+ Mature Mode ON'
+      : '🔞 21+ Mature Mode OFF';
+  }
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  const adult=$('adult');
+  if(adult){
+    adult.setAttribute('role','button');
+    adult.setAttribute('aria-pressed','false');
+    adult.addEventListener('click',updateMatureMode);
+  }
+});
 function status(id,text,type=""){const e=$(id);if(!e)return;e.textContent=text;e.className="status show "+type}
 function esc(s){return String(s??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
 function nameSafe(s){return String(s||"story").replace(/[^\w\u0900-\u097F-]+/g,"_").slice(0,50)||"story"}
@@ -1084,7 +1110,7 @@ function openProject(i){const all=JSON.parse(localStorage.getItem("storyDirector
 function deleteProject(i){const all=JSON.parse(localStorage.getItem("storyDirectorV16Projects")||"[]");all.splice(i,1);localStorage.setItem("storyDirectorV16Projects",JSON.stringify(all));renderProjects()}
 $('newStory').onclick=()=>{showPage('storyPage');$('storyCard').scrollIntoView({behavior:'smooth'})};$('pasteStory').onclick=()=>{showPage('storyPage');$('pasteCard').scrollIntoView({behavior:'smooth'})};$('openProjects').onclick=()=>{showPage('projectsPage');renderProjects()};
 document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>{showPage(b.dataset.nav);if(b.dataset.nav==='projectsPage')renderProjects()});
-$('generateStory').onclick=async()=>{const idea=$('idea').value.trim();if(!idea){status('storyStatus','à¤ªà¤¹à¤²à¥ Story Idea à¤²à¤¿à¤à¤¿à¤à¥¤','err');return}const b=$('generateStory');b.disabled=true;b.textContent='â³ à¤à¤¹à¤¾à¤¨à¥ à¤¬à¤¨ à¤°à¤¹à¥ à¤¹à¥...';status('storyStatus','AI à¤à¤¹à¤¾à¤¨à¥ à¤¤à¥à¤¯à¤¾à¤° à¤à¤° à¤°à¤¹à¤¾ à¤¹à¥â¦','info');try{const r=await fetch('/api/story',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:idea,language:$('language').value,genre:$('genre').value,length:$('length').value,tone:$('style').value,mature:$('ageMode').value==='mature',direction:$('direction').value,outputFormat:$('outputFormat').value})});const d=await r.json().catch(()=>({}));if(!r.ok||!d.ok)throw Error(d.error||('Server error: '+r.status));const generated=typeof d.story==='string'?d.story:JSON.stringify(d.story||'',null,2);$('story').value=generated;$('title').value=(generated.split('\n').find(x=>x.trim())||'Generated Story').replace(/^TITLE\s*:\s*/i,'').trim();$('downloadStory').disabled=false;$('scriptState').textContent='Generated';status('storyStatus','â à¤à¤¹à¤¾à¤¨à¥ à¤¤à¥à¤¯à¤¾à¤° à¤¹à¥ à¤à¤à¥¤ à¤à¤¬ Script step à¤¸à¥ Director à¤ªà¤° à¤à¤¾à¤à¤à¥¤','ok');setStep(2)}catch(e){status('storyStatus','â '+e.message,'err')}finally{b.disabled=false;b.textContent='â¨ Generate Story'}};
+$('generateStory').onclick=async()=>{const idea=$('idea').value.trim();if(!idea){status('storyStatus','à¤ªà¤¹à¤²à¥ Story Idea à¤²à¤¿à¤à¤¿à¤à¥¤','err');return}const b=$('generateStory');b.disabled=true;b.textContent='â³ à¤à¤¹à¤¾à¤¨à¥ à¤¬à¤¨ à¤°à¤¹à¥ à¤¹à¥...';status('storyStatus','AI à¤à¤¹à¤¾à¤¨à¥ à¤¤à¥à¤¯à¤¾à¤° à¤à¤° à¤°à¤¹à¤¾ à¤¹à¥â¦','info');try{const r=await fetch('/api/story',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:idea,language:$('language').value,genre:$('genre').value,length:$('length').value,tone:$('style').value,mature:matureMode,direction:$('direction').value,outputFormat:$('outputFormat').value})});const d=await r.json().catch(()=>({}));if(!r.ok||!d.ok)throw Error(d.error||('Server error: '+r.status));const generated=typeof d.story==='string'?d.story:JSON.stringify(d.story||'',null,2);$('story').value=generated;$('title').value=(generated.split('\n').find(x=>x.trim())||'Generated Story').replace(/^TITLE\s*:\s*/i,'').trim();$('downloadStory').disabled=false;$('scriptState').textContent='Generated';status('storyStatus','â à¤à¤¹à¤¾à¤¨à¥ à¤¤à¥à¤¯à¤¾à¤° à¤¹à¥ à¤à¤à¥¤ à¤à¤¬ Script step à¤¸à¥ Director à¤ªà¤° à¤à¤¾à¤à¤à¥¤','ok');setStep(2)}catch(e){status('storyStatus','â '+e.message,'err')}finally{b.disabled=false;b.textContent='â¨ Generate Story'}};
 $('usePaste').onclick=()=>{const t=$('pasteText').value.trim();if(!t){status('storyStatus','à¤ªà¤¹à¤²à¥ à¤à¤¹à¤¾à¤¨à¥ paste à¤à¥à¤à¤¿à¤à¥¤','err');return}syncPaste();setStep(2);setTimeout(()=>{$('analyze').click()},350)};
 $('downloadStory').onclick=()=>downloadBlob(new Blob([$('title').value+'\n\n'+$('story').value],{type:'text/plain;charset=utf-8'}),nameSafe($('title').value)+'.txt');$('saveLocal').onclick=saveProject;
 $('clearAll').onclick=()=>{if(!confirm('à¤ªà¥à¤°à¤¾ current project à¤¸à¤¾à¤«à¤¼ à¤à¤°à¥à¤?'))return;['idea','title','story','direction','pasteText'].forEach(x=>$(x).value='');detected=null;finalBlob=null;audioGeneration={running:false,paused:false,index:0,parts:[],fmt:null};$('downloadStory').disabled=true;$('generate').disabled=true;$('speakers').innerHTML='à¤à¤­à¥ speakers detect à¤¨à¤¹à¥à¤ à¤¹à¥à¤ à¤¹à¥à¤à¥¤';$('segments').innerHTML='Analysis à¤à¥ à¤¬à¤¾à¤¦ segments à¤¯à¤¹à¤¾à¤ à¤à¤à¤à¤à¥à¥¤';$('player').style.display='none';$('download').disabled=true;$('downloadMp3').disabled=true;$('downloadM4a').disabled=true;setStep(1);status('scriptStatus','à¤¸à¤¾à¤«à¤¼ à¤à¤° à¤¦à¤¿à¤¯à¤¾ à¤à¤¯à¤¾à¥¤','ok')};
