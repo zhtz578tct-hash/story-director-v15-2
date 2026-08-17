@@ -1312,7 +1312,7 @@ Keep the story appropriate for a general audience.`;
 
  return ai(env,instructions,p);
 }
-
+async function analyzeStory(env,b){
  const s=String(b.story||"").trim();
  if(!s)throw Error("Story à¤à¤¾à¤²à¥ à¤¹à¥à¥¤");
 
@@ -1350,7 +1350,16 @@ Keep the story appropriate for a general audience.`;
   "Questions should use natural question prosody but emotion must be context-aware.",
   "Return valid JSON only."
 ].join("\n");
+function defaultServerVoice(s){
+  const role=String(s?.role||"").toLowerCase();
+  const gender=String(s?.gender||"").toLowerCase();
 
+  if(role.includes("narrator")||role.includes("narration")) return "onyx";
+  if(gender==="female") return "nova";
+  if(gender==="male") return "onyx";
+
+  return "alloy";
+}
  const t=await ai(env,instructions,s);
  let d;
  try{d=JSON.parse(cleanJson(t))}catch{throw Error("AI returned invalid JSON.")}
@@ -1371,14 +1380,6 @@ Keep the story appropriate for a general audience.`;
   voice:s.voice||undefined
  }));
  return {...d,ok:true};
-}
-function defaultServerVoice(s){
- const role=String(s?.role||"").toLowerCase();
- const gender=String(s?.gender||"").toLowerCase();
- if(role.includes("narrator")||role.includes("narration"))return "shimmer";
- if(gender==="female")return "nova";
- if(gender==="male")return "onyx";
- return "alloy";
 }
 
 function repairMojibake(s){
