@@ -1069,7 +1069,68 @@ if(adult){
 function status(id,text,type=""){const e=$(id);if(!e)return;e.textContent=text;e.className="status show "+type}
 function esc(s){return String(s??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
 function nameSafe(s){return String(s||"story").replace(/[^\w\u0900-\u097F-]+/g,"_").slice(0,50)||"story"}
-function downloadBlob(blob,name){const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=name||"story.wav";a.rel="noopener";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3000)}
+function downloadBlob(blob, name) {
+  if (!blob) {
+    status('status', 'Download के लिए file उपलब्ध नहीं है।', 'err');
+    return;
+  }
+
+  const file = new File(
+    [blob],
+    name || 'story.txt',
+    {
+      type: blob.type || 'application/octet-stream'
+    }
+  );
+
+  // iPhone / iPad
+  if (
+    navigator.share &&
+    navigator.canShare &&
+    navigator.canShare({ files: [file] })
+  ) {
+    navigator.share({
+      files: [file],
+      title: name || 'Story'
+    })
+    .then(() => {
+      status('status', 'File save/share के लिए तैयार है ✅', 'ok');
+    })
+    .catch(err => {
+      if (err && err.name === 'AbortError') return;
+
+      console.error(err);
+      fallbackDownload(blob, name);
+    });
+
+    return;
+  }
+
+  fallbackDownload(blob, name);
+}
+
+function fallbackDownload(blob, name) {
+  try {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+
+    a.href = url;
+    a.download = name || 'story.txt';
+    a.style.display = 'none';
+
+    document.body.appendChild(a);
+    a.click();
+
+    setTimeout(() => {
+      a.remove();
+      URL.revokeObjectURL(url);
+    }, 1500);
+
+  } catch (err) {
+    console.error(err);
+    status('status', 'Download failed: ' + err.message, 'err');
+  }
+}
 function setStep(n){currentStep=n;document.querySelectorAll(".step").forEach(x=>{const s=Number(x.dataset.step);x.classList.toggle("active",s===n);x.classList.toggle("done",s<n)});if(n===1)showPage("storyPage");if(n===2)showPage("storyPage");if(n===3)showPage("directorPage");if(n===4)showPage("voicePage")}
 function showPage(id){
   document.querySelectorAll(".page").forEach(x=>x.classList.add("hidden"));
