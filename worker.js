@@ -634,7 +634,9 @@ body{
   max-width:100%;
   overflow-x:hidden;
 }
-
+.hidden{
+  display:none !important;
+}
 .wrap,
 .card,
 .hero{
@@ -801,21 +803,21 @@ function updateMatureMode(){
     : '<span>&#128286; 21+ Mature Mode OFF</span>';
 }
 
-document.addEventListener('DOMContentLoaded', ()=>{
-  const adult = document.querySelector('.mature-toggle');
+const adult = document.querySelector('.mature-toggle');
 
-  if(adult){
-    adult.setAttribute('role','button');
-    adult.setAttribute('aria-pressed','false');
+if(adult){
+  adult.setAttribute('role','button');
+  adult.setAttribute('aria-pressed','false');
 
-    adult.addEventListener('click', updateMatureMode);
+  adult.onclick = updateMatureMode;
 
-    adult.addEventListener('keydown', (e)=>{
-      if(e.key === 'Enter' || e.key === ' '){
-        e.preventDefault();
-        updateMatureMode();
-      }
-    });
+  adult.onkeydown = (e)=>{
+    if(e.key === 'Enter' || e.key === ' '){
+      e.preventDefault();
+      updateMatureMode();
+    }
+  };
+}
   }
 });
 function status(id,text,type=""){const e=$(id);if(!e)return;e.textContent=text;e.className="status show "+type}
@@ -868,7 +870,7 @@ $('analyze').onclick=async()=>{
         story,
         language:$('language').value,
         emotion:$('emotion').checked,
-        mature:$('adult').checked
+        mature:matureMode
       })
     });
 
