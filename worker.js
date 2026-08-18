@@ -696,7 +696,7 @@ body{
 
 /* Navigation buttons */
 .bottom-nav button,
-.nav .nav-item,
+.nav button,
 .nav a{
   background:transparent !important;
   border:0 !important;
@@ -707,7 +707,6 @@ body{
 
 /* Navigation active state */
 .nav button.active,
-.nav .nav-item.active,
 .nav a.active{
   background:transparent !important;
   border:0 !important;
@@ -718,8 +717,6 @@ body{
 /* Navigation hover / tap */
 .nav button:hover,
 .nav button:active,
-.nav .nav-item:hover,
-.nav .nav-item:active,
 .nav a:hover,
 .nav a:active{
   background:rgba(108,99,255,.08) !important;
@@ -733,7 +730,7 @@ body{
 .choice *,
 .bottom-nav *,
 .bottom-nav button *,
-.bottom-nav .nav-item *{
+.nav button *{
   box-shadow:none !important;
 }
 </style>
