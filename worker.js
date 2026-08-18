@@ -634,9 +634,6 @@ body{
   max-width:100%;
   overflow-x:hidden;
 }
-.hidden{
-  display:none !important;
-}
 .wrap,
 .card,
 .hero{
