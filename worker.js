@@ -1088,7 +1088,7 @@ audio{
 </div>
 
 <div class="card" id="scriptCard"><div class="section-title"><h2>ð Script</h2><span class="pill" id="scriptState">Draft</span></div><label>Title</label><input id="title" placeholder="Story title"><label>Story / Script</label><textarea id="story" placeholder="Generated à¤¯à¤¾ pasted story à¤¯à¤¹à¤¾à¤ à¤à¤à¤à¥â¦"></textarea>
-<div class="row"><button class="secondary" id="downloadStory" disabled>⬇️ Download Story</button><button class="secondary" id="saveLocal">💾 Save Project</button><button class="danger" id="clearAll">Clear</button></div><div id="scriptStatus" class="status"></div></div>
+<div class="row"><button class="secondary" id="downloadStory" disabled>&#x2B07;&#xFE0F; Download Story</button><button class="secondary" id="saveLocal">&#x1F4BE; Save Project</button><button class="danger" id="clearAll">Clear</button></div><div id="scriptStatus" class="status"></div></div>
 </section>
 
 <section id="directorPage" class="page hidden">
