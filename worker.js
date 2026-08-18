@@ -1071,6 +1071,7 @@ audio{
 <section id="storyPage" class="page">
 <div class="card" id="storyCard">
 <h2>ð¡ Story</h2>
+<div class="small" style="margin:8px 0 14px">✨ AI Writing Quality — Always On</div>
 <label>Story Idea / Prompt</label><textarea id="idea" placeholder="à¤à¤¦à¤¾à¤¹à¤°à¤£: à¤à¤¾à¤à¤µ à¤à¥ à¤¬à¤¾à¤°à¤¿à¤¶ à¤µà¤¾à¤²à¥ à¤¶à¤¾à¤® à¤®à¥à¤ à¤¦à¥ à¤ªà¥à¤°à¤¾à¤¨à¥ à¤¦à¥à¤¸à¥à¤¤ à¤à¤ à¤¸à¤¾à¤² à¤¬à¤¾à¤¦ à¤®à¤¿à¤²à¤¤à¥ à¤¹à¥à¤à¥¤"></textarea>
 <div class="grid"><div><label>Language / Dialect</label><select id="language"><option>Hindi</option><option>Bhojpuri</option><option>Purvanchali / Banarasi</option><option>Urdu</option><option>English</option></select></div><div><label>Genre</label><select id="genre"><option>Drama</option><option>Romance</option><option>Suspense</option><option>Thriller</option><option>Comedy</option><option>Family</option><option>Adventure</option><option>Horror</option><option>Emotional</option></select></div></div>
 <div class="three"><div><label>Story Length</label><select id="length"><option value="short">Short</option><option value="medium" selected>Medium</option><option value="long">Long</option></select></div><div><label>Writing Style</label><select id="style"><option>Cinematic</option><option>Natural conversational</option><option>Literary</option><option>Fast paced</option><option>Emotional</option></select></div><div><label>Age Mode</label><select id="ageMode"><option value="general">General</option><option value="mature">21+ Mature</option></select></div></div>
