@@ -1137,8 +1137,6 @@ if(adult){
     }
   };
 }
-  }
-});
 function status(id,text,type=""){const e=$(id);if(!e)return;e.textContent=text;e.className="status show "+type}
 function esc(s){return String(s??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
 function nameSafe(s){return String(s||"story").replace(/[^\w\u0900-\u097F-]+/g,"_").slice(0,50)||"story"}
