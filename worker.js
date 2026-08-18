@@ -696,8 +696,8 @@ body{
 
 /* Navigation buttons */
 .bottom-nav button,
-.bottom-nav .nav-item,
-.bottom-nav a{
+.nav .nav-item,
+.nav a{
   background:transparent !important;
   border:0 !important;
   box-shadow:none !important;
@@ -706,9 +706,9 @@ body{
 }
 
 /* Navigation active state */
-.bottom-nav button.active,
-.bottom-nav .nav-item.active,
-.bottom-nav a.active{
+.nav button.active,
+.nav .nav-item.active,
+.nav a.active{
   background:transparent !important;
   border:0 !important;
   box-shadow:none !important;
@@ -716,12 +716,12 @@ body{
 }
 
 /* Navigation hover / tap */
-.bottom-nav button:hover,
-.bottom-nav button:active,
-.bottom-nav .nav-item:hover,
-.bottom-nav .nav-item:active,
-.bottom-nav a:hover,
-.bottom-nav a:active{
+.nav button:hover,
+.nav button:active,
+.nav .nav-item:hover,
+.nav .nav-item:active,
+.nav a:hover,
+.nav a:active{
   background:rgba(108,99,255,.08) !important;
   box-shadow:none !important;
 }
