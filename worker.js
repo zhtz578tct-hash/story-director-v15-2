@@ -732,6 +732,255 @@ body{
 .nav button *{
   box-shadow:none !important;
 }
+/* =========================================================
+   STORY DIRECTOR V16.3 — MODERN iPHONE UI POLISH
+   UI ONLY — JavaScript / API functionality untouched
+   ========================================================= */
+
+/* ---------- Premium page feel ---------- */
+body{
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+
+.wrap{
+  width:100%;
+  max-width:760px !important;
+  margin:0 auto !important;
+  padding-left:14px !important;
+  padding-right:14px !important;
+}
+
+/* ---------- Cleaner top header ---------- */
+.topbar{
+  min-height:42px !important;
+  margin:0 0 8px !important;
+  padding:6px 4px !important;
+}
+
+.brand{
+  font-size:17px !important;
+  font-weight:800 !important;
+  letter-spacing:-.35px !important;
+}
+
+/* ---------- Modern step navigation ---------- */
+.stepper{
+  display:grid !important;
+  grid-template-columns:repeat(4,1fr) !important;
+  gap:6px !important;
+  margin:4px 0 14px !important;
+  padding:3px !important;
+}
+
+.step{
+  min-height:38px !important;
+  padding:7px 4px !important;
+  border-radius:12px !important;
+  font-size:11px !important;
+  font-weight:700 !important;
+  white-space:nowrap;
+  transition:
+    transform .18s ease,
+    background .18s ease,
+    box-shadow .18s ease !important;
+}
+
+.step.active{
+  transform:translateY(-1px) !important;
+  box-shadow:0 5px 16px rgba(108,99,255,.18) !important;
+}
+
+/* ---------- Compact premium hero ---------- */
+.hero{
+  padding:18px 16px !important;
+  margin-bottom:12px !important;
+  border-radius:20px !important;
+}
+
+.hero h1{
+  font-size:24px !important;
+  line-height:1.15 !important;
+  letter-spacing:-.55px !important;
+  margin:2px 0 7px !important;
+}
+
+.hero p{
+  font-size:14px !important;
+  line-height:1.5 !important;
+}
+
+/* ---------- Choice buttons ---------- */
+.choice-grid{
+  gap:7px !important;
+}
+
+.choice{
+  min-height:44px !important;
+  padding:9px 10px !important;
+  border-radius:13px !important;
+  font-size:13px !important;
+  font-weight:750 !important;
+  transition:
+    transform .15s ease,
+    background .15s ease !important;
+}
+
+.choice:active{
+  transform:scale(.98) !important;
+}
+
+/* ---------- Modern cards ---------- */
+.card{
+  padding:15px !important;
+  margin-bottom:12px !important;
+  border-radius:19px !important;
+  overflow:hidden;
+}
+
+.card h2{
+  font-size:20px !important;
+  line-height:1.2 !important;
+  margin-top:0 !important;
+}
+
+/* ---------- Better labels ---------- */
+label{
+  font-size:14px !important;
+  font-weight:700 !important;
+}
+
+/* ---------- Inputs / selects / textareas ---------- */
+input,
+select,
+textarea{
+  border-radius:14px !important;
+  font-size:15px !important;
+  min-height:44px;
+}
+
+textarea{
+  line-height:1.5 !important;
+}
+
+.card textarea{
+  min-height:120px !important;
+}
+
+/* ---------- Buttons ---------- */
+button{
+  min-height:44px !important;
+  border-radius:13px !important;
+  font-size:14px !important;
+  font-weight:750 !important;
+  transition:
+    transform .15s ease,
+    opacity .15s ease,
+    box-shadow .15s ease !important;
+}
+
+button:active{
+  transform:scale(.98) !important;
+}
+
+/* ---------- Primary CTA ---------- */
+button.primary{
+  min-height:46px !important;
+  border-radius:14px !important;
+  font-size:15px !important;
+  box-shadow:0 7px 18px rgba(108,99,255,.20) !important;
+}
+
+/* ---------- Section spacing ---------- */
+section.page{
+  scroll-margin-top:12px;
+}
+
+/* ---------- iPhone touch optimization ---------- */
+button,
+.step,
+.choice,
+select,
+input,
+textarea{
+  -webkit-tap-highlight-color:transparent;
+}
+
+/* ---------- Prevent accidental horizontal overflow ---------- */
+html,
+body{
+  max-width:100%;
+  overflow-x:hidden !important;
+}
+
+.wrap,
+.hero,
+.card,
+.choice-grid,
+.stepper{
+  max-width:100%;
+  box-sizing:border-box;
+}
+
+/* ---------- iPhone bottom navigation breathing room ---------- */
+body{
+  padding-bottom:max(
+    18px,
+    env(safe-area-inset-bottom)
+  ) !important;
+}
+
+/* ---------- Small-screen refinement ---------- */
+@media(max-width:430px){
+
+  .wrap{
+    padding-left:10px !important;
+    padding-right:10px !important;
+  }
+
+  .topbar{
+    padding-left:3px !important;
+    padding-right:3px !important;
+  }
+
+  .step{
+    min-height:36px !important;
+    padding:6px 2px !important;
+    font-size:10px !important;
+  }
+
+  .hero{
+    padding:16px 14px !important;
+    border-radius:18px !important;
+  }
+
+  .hero h1{
+    font-size:22px !important;
+  }
+
+  .hero p{
+    font-size:13px !important;
+  }
+
+  .card{
+    padding:13px !important;
+    border-radius:17px !important;
+  }
+
+  .card h2{
+    font-size:19px !important;
+  }
+
+  input,
+  select,
+  textarea{
+    font-size:16px !important;
+  }
+
+  button{
+    min-height:45px !important;
+  }
+}
 </style>
 </head>
 <body>
