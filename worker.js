@@ -6,1684 +6,1053 @@ const HTML = String.raw`<!doctype html>
 <meta name="theme-color" content="#0b0d12">
 <title>Story Director V16.1</title>
 <style>
-:root{
-  --app-bg:#0b0d12;
-  --card-bg:#151922;
-  --card-border:rgba(255,255,255,.08);
-  --text-main:#f5f7fb;
-  --text-muted:#9aa3b2;
-  --accent:#6c63ff;
-  --accent-2:#8b7cff;
-}
-
-html,body{
-  background:var(--app-bg);
-  color:var(--text-main);
-}
 /* =========================================================
-   STORY DIRECTOR V16.2 — COMPACT DIRECTOR / SEGMENT UI
-   Purpose:
-   - 100+ segments को compact बनाना
-   - बड़े speaker cards की जगह editor-style rows
-   - Mobile/iPhone friendly
-   - Existing functionality को preserve करना
+   STORY DIRECTOR — PREMIUM iPHONE UI
+   UI ONLY — EXISTING HTML + JAVASCRIPT PRESERVED
    ========================================================= */
-
-/* ---------- Director segment area ---------- */
-
-[class*="segment-list"],
-[class*="segments-list"],
-[class*="speaker-list"],
-[class*="director-list"] {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-/* ---------- Individual segment cards ---------- */
-
-[class*="segment-card"],
-[class*="speaker-card"],
-[class*="dialogue-card"] {
-  padding: 12px 14px !important;
-  margin: 0 !important;
-  border-radius: 16px !important;
-  min-height: auto !important;
-  box-shadow: none !important;
-}
-
-/* ---------- Compact segment header ---------- */
-
-[class*="segment-card"] > div:first-child,
-[class*="speaker-card"] > div:first-child {
-  margin-bottom: 6px !important;
-}
-
-/* ---------- Speaker / emotion line ---------- */
-
-[class*="segment-card"] [class*="emotion"],
-[class*="speaker-card"] [class*="emotion"] {
-  font-size: 13px !important;
-}
-
-/* ---------- Text / dialogue ---------- */
-
-[class*="segment-card"] textarea,
-[class*="segment-card"] input,
-[class*="speaker-card"] textarea,
-[class*="speaker-card"] input,
-[class*="dialogue-card"] textarea {
-  min-height: 58px !important;
-  max-height: 110px !important;
-  padding: 11px 13px !important;
-  font-size: 16px !important;
-  line-height: 1.45 !important;
-  border-radius: 13px !important;
-}
-
-/* ---------- Preview / Apply buttons ---------- */
-
-[class*="segment-card"] button,
-[class*="speaker-card"] button,
-[class*="dialogue-card"] button {
-  min-height: 42px !important;
-  padding: 8px 12px !important;
-  border-radius: 12px !important;
-  font-size: 14px !important;
-}
-
-/* ---------- Keep action buttons compact ---------- */
-
-[class*="segment-card"] button {
-  margin-top: 6px !important;
-}
-
-/* ---------- Reduce vertical gaps ---------- */
-
-[class*="segment-card"] p,
-[class*="speaker-card"] p {
-  margin: 3px 0 !important;
-}
-
-[class*="segment-card"] h3,
-[class*="segment-card"] h4,
-[class*="speaker-card"] h3,
-[class*="speaker-card"] h4 {
-  margin: 3px 0 !important;
-}
-
-/* ---------- Director main container ---------- */
-
-[class*="director"] {
-  scroll-behavior: smooth;
-}
-
-/* ---------- Sticky batch toolbar ---------- */
-
-.director-batch-toolbar,
-#directorBatchToolbar,
-[data-director-toolbar] {
-  position: sticky;
-  top: 8px;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px;
-  margin: 8px 0 12px;
-  border-radius: 18px;
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-}
-
-/* ---------- Toolbar buttons ---------- */
-
-.director-batch-toolbar button,
-#directorBatchToolbar button,
-[data-director-toolbar] button {
-  min-height: 42px;
-  padding: 8px 13px;
-  border-radius: 12px;
-  font-weight: 700;
-  white-space: nowrap;
-}
-
-/* ---------- Progress ---------- */
-
-.director-progress,
-#directorProgress,
-[data-director-progress] {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 38px;
-  padding: 7px 11px;
-  border-radius: 12px;
-  font-size: 13px;
-  font-weight: 700;
-}
-
-/* ---------- Generation states ---------- */
-
-.segment-generating {
-  position: relative;
-  opacity: .78;
-}
-
-.segment-generating::after {
-  content: "Generating…";
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  padding: 4px 8px;
-  border-radius: 8px;
-  font-size: 11px;
-  font-weight: 700;
-}
-
-.segment-generated {
-  opacity: 1;
-}
-
-.segment-generated::after {
-  content: "✓ Ready";
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  padding: 4px 8px;
-  border-radius: 8px;
-  font-size: 11px;
-  font-weight: 700;
-}
-
-.segment-failed::after {
-  content: "⚠ Failed";
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  padding: 4px 8px;
-  border-radius: 8px;
-  font-size: 11px;
-  font-weight: 700;
-}
-
-/* ---------- Accessibility / touch ---------- */
-
-button,
-select,
-input,
-textarea {
-  -webkit-tap-highlight-color: transparent;
-}
-
-button {
-  touch-action: manipulation;
-}
-
-/* ---------- Mobile / iPhone ---------- */
-
-@media (max-width: 600px) {
-
-  [class*="segment-card"],
-  [class*="speaker-card"],
-  [class*="dialogue-card"] {
-    padding: 10px !important;
-    border-radius: 14px !important;
-  }
-
-  [class*="segment-card"] textarea,
-  [class*="speaker-card"] textarea {
-    font-size: 16px !important;
-    min-height: 54px !important;
-  }
-
-  [class*="segment-card"] button,
-  [class*="speaker-card"] button {
-    min-height: 40px !important;
-    font-size: 13px !important;
-  }
-
-  .director-batch-toolbar,
-  #directorBatchToolbar,
-  [data-director-toolbar] {
-    overflow-x: auto;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .director-batch-toolbar::-webkit-scrollbar,
-  #directorBatchToolbar::-webkit-scrollbar,
-  [data-director-toolbar]::-webkit-scrollbar {
-    display: none;
-  }
-
-  .director-batch-toolbar button,
-  #directorBatchToolbar button,
-  [data-director-toolbar] button {
-    flex: 0 0 auto;
-  }
-}
-/* ===== MODERN APP CARDS ===== */
-
-.card{
-  background:linear-gradient(
-    145deg,
-    rgba(24,28,38,.98),
-    rgba(15,18,25,.98)
-  ) !important;
-  border:1px solid rgba(255,255,255,.08) !important;
-  border-radius:20px !important;
-  box-shadow:
-    0 10px 30px rgba(0,0,0,.22),
-    inset 0 1px 0 rgba(255,255,255,.035) !important;
-}
-
-.card h2,
-.card h3,
-.card h4{
-  color:#f5f7fb;
-  letter-spacing:-.2px;
-}
-
-.card label{
-  color:#aeb6c5;
-  font-weight:600;
-}
-
-.card input,
-.card textarea,
-.card select{
-  background:#0f131b !important;
-  color:#f5f7fb !important;
-  border:1px solid rgba(255,255,255,.09) !important;
-  border-radius:14px !important;
-  outline:none;
-}
-
-.card input:focus,
-.card textarea:focus,
-.card select:focus{
-  border-color:rgba(108,99,255,.75) !important;
-  box-shadow:0 0 0 3px rgba(108,99,255,.12);
-}
-/* ===== MODERN APP BUTTONS ===== */
-
-button{
-  border:0;
-  border-radius:14px !important;
-  min-height:46px;
-  padding:0 18px;
-  font-weight:700;
-  letter-spacing:.1px;
-  transition:
-    transform .15s ease,
-    box-shadow .15s ease,
-    opacity .15s ease;
-  -webkit-tap-highlight-color:transparent;
-}
-
-button:active{
-  transform:scale(.97);
-}
-
-button:not(:disabled){
-  cursor:pointer;
-}
-
-button:disabled{
-  opacity:.45;
-  cursor:not-allowed;
-}
-
-button.primary,
-button#generateStory,
-button#generate{
-  background:linear-gradient(
-    135deg,
-    #6c63ff,
-    #8b7cff
-  ) !important;
-  color:#fff !important;
-  box-shadow:
-    0 8px 20px rgba(108,99,255,.25);
-}
-
-button.primary:hover,
-button#generateStory:hover,
-button#generate:hover{
-  box-shadow:
-    0 10px 26px rgba(108,99,255,.35);
-}
-
-button.secondary{
-  background:#202633 !important;
-  color:#e8ebf2 !important;
-  border:1px solid rgba(255,255,255,.08) !important;
-}
-
-button.secondary:hover{
-  background:#293141 !important;
-}
-
-button.danger{
-  background:rgba(220,70,70,.12) !important;
-  color:#ff8d8d !important;
-  border:1px solid rgba(255,90,90,.18) !important;
-}
-/* =========================================================
-   STORY DIRECTOR V16.2 — MODERN iPHONE UI
-   UI ONLY — existing JavaScript/API functionality untouched
-   ========================================================= */
-
-/* ---------- Compact App Header ---------- */
-.topbar{
-  margin:0 -1px 6px !important;
-  padding:3px 2px 6px !important;
-  min-height:34px;
-  display:flex;
-  align-items:center;
-}
-
-.brand{
-  font-size:18px !important;
-  font-weight:800 !important;
-  letter-spacing:-.25px !important;
-  line-height:1.1 !important;
-}
-
-/* ---------- Main workflow ---------- */
-.stepper{
-  display:grid !important;
-  grid-template-columns:repeat(4,1fr);
-  gap:5px !important;
-  margin:0 0 8px !important;
-  padding:3px 0 !important;
-  top:43px !important;
-}
-
-.step{
-  min-height:34px;
-  padding:8px 4px !important;
-  border-radius:10px !important;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  font-size:11px !important;
-  font-weight:700 !important;
-  white-space:nowrap;
-  cursor:pointer;
-  touch-action:manipulation;
-  transition:transform .15s ease,background .15s ease;
-}
-
-.step:active{
-  transform:scale(.96);
-}
-
-.step.active{
-  box-shadow:0 5px 14px rgba(0,0,0,.12) !important;
-}
-
-/* ---------- Compact hero ---------- */
-.hero{
-  padding:15px 13px !important;
-  margin-bottom:9px !important;
-  border-radius:18px !important;
-}
-
-.hero h1{
-  font-size:21px !important;
-  line-height:1.18 !important;
-  letter-spacing:-.45px !important;
-  margin:4px 0 5px !important;
-}
-
-.hero p{
-  font-size:13px !important;
-  line-height:1.4 !important;
-  margin:0 !important;
-}
-
-/* ---------- Modern compact cards ---------- */
-.card{
-  padding:13px !important;
-  margin-bottom:9px !important;
-  border-radius:17px !important;
-}
-
-.card h2{
-  font-size:20px !important;
-  line-height:1.2 !important;
-  letter-spacing:-.25px !important;
-  margin:0 0 8px !important;
-}
-
-.card h3{
-  font-size:16px !important;
-  line-height:1.25 !important;
-  margin:7px 0 5px !important;
-}
-
-.card label{
-  display:block;
-  font-size:13px !important;
-  line-height:1.25 !important;
-  margin:7px 0 4px !important;
-  font-weight:650 !important;
-}
-
-/* ---------- Inputs ---------- */
-.card input,
-.card select,
-.card textarea{
-  width:100%;
-  box-sizing:border-box;
-  font-size:14px !important;
-  line-height:1.4 !important;
-  border-radius:11px !important;
-}
-
-.card input,
-.card select{
-  min-height:40px !important;
-  padding:8px 10px !important;
-}
-
-.card textarea{
-  padding:9px 10px !important;
-  min-height:120px !important;
-}
-
-/* ---------- Compact grids ---------- */
-.grid,
-.three{
-  gap:7px !important;
-}
-
-@media(max-width:650px){
-  .grid,
-  .three{
-    grid-template-columns:1fr !important;
-  }
-}
-
-/* ---------- Buttons ---------- */
-button{
-  min-height:42px !important;
-  padding:0 13px !important;
-  border-radius:11px !important;
-  font-size:14px !important;
-  font-weight:700 !important;
-}
-
-.choice{
-  min-height:58px !important;
-  padding:11px 12px !important;
-}
-
-.choice b{
-  font-size:14px !important;
-}
-
-.choice span{
-  font-size:12px !important;
-  line-height:1.3 !important;
-}
-
-/* ---------- Helper / status text ---------- */
-.small,
-.status,
-.hint,
-.help,
-.muted{
-  font-size:12px !important;
-  line-height:1.35 !important;
-}
-
-/* ---------- Reduce unnecessary vertical spacing ---------- */
-.card > p{
-  margin:5px 0 !important;
-}
-
-.card > div{
-  margin-top:7px;
-}
-
-details{
-  margin-top:7px !important;
-}
-
-details summary{
-  font-size:13px !important;
-  padding:8px 0 !important;
-}
-
-/* ---------- Single-column iPhone layout ---------- */
-@media(max-width:650px){
-
-  .wrap{
-    max-width:760px !important;
-    padding:6px 9px 96px !important;
-  }
-
-  .topbar{
-    padding:3px 1px 5px !important;
-  }
-
-  .brand{
-    font-size:18px !important;
-  }
-
-  .hero{
-    padding:14px 12px !important;
-    border-radius:17px !important;
-  }
-
-  .hero h1{
-    font-size:20px !important;
-  }
-
-  .hero p{
-    font-size:13px !important;
-  }
-
-  .card{
-    padding:12px !important;
-    border-radius:16px !important;
-  }
-
-  .card h2{
-    font-size:19px !important;
-  }
-
-  .step{
-    font-size:10px !important;
-    min-height:33px;
-    padding:7px 2px !important;
-  }
-
-  .card textarea{
-    min-height:115px !important;
-    font-size:14px !important;
-  }
-
-  button{
-    min-height:42px !important;
-    font-size:14px !important;
-  }
-}
-
-/* ---------- Touch optimization ---------- */
-button,
-.step,
-select,
-input,
-textarea{
-  -webkit-tap-highlight-color:transparent;
-}
-
-button,
-.step{
-  touch-action:manipulation;
-}
-
-/* ---------- Prevent iOS horizontal overflow ---------- */
-html,
-body{
-  max-width:100%;
-  overflow-x:hidden;
-}
-.wrap,
-.card,
-.hero{
-  max-width:100%;
-  box-sizing:border-box;
-}
-
-/* ---------- Safe bottom space for fixed navigation ---------- */
-body{
-  padding-bottom:env(safe-area-inset-bottom);
-}
-/* =========================================================
-   V16.2 — Transparent Choice & Bottom Navigation
-   UI ONLY — functionality untouched
-   ========================================================= */
-
-/* Home screen choice buttons */
-.choice{
-  background:transparent !important;
-  border:0 !important;
-  box-shadow:none !important;
-  color:#6c63ff !important;
-  border-radius:0 !important;
-  padding:10px 8px !important;
-}
-
-/* Choice button hover / active */
-.choice:hover,
-.choice:active,
-.choice:focus{
-  background:rgba(108,99,255,.08) !important;
-  border:0 !important;
-  box-shadow:none !important;
-}
-
-/* Remove any white inner background */
-.choice::before,
-.choice::after{
-  background:transparent !important;
-  box-shadow:none !important;
-}
-
-/* Keep emoji / symbol visible */
-.choice b{
-  color:inherit !important;
-}
-
-/* =========================================================
-   Bottom navigation
-   ========================================================= */
-
-.bottom-nav{
-  background:rgba(11,13,18,.88) !important;
-  border:0 !important;
-  box-shadow:none !important;
-  backdrop-filter:blur(18px);
-  -webkit-backdrop-filter:blur(18px);
-}
-
-/* Navigation buttons */
-.bottom-nav button,
-.nav button,
-.nav a{
-  background:transparent !important;
-  border:0 !important;
-  box-shadow:none !important;
-  color:#6c63ff !important;
-  border-radius:0 !important;
-}
-
-/* Navigation active state */
-.nav button.active,
-.nav a.active{
-  background:transparent !important;
-  border:0 !important;
-  box-shadow:none !important;
-  color:#6c63ff !important;
-}
-
-/* Navigation hover / tap */
-.nav button:hover,
-.nav button:active,
-.nav a:hover,
-.nav a:active{
-  background:rgba(108,99,255,.08) !important;
-  box-shadow:none !important;
-}
-
-/* =========================================================
-   Safety: prevent accidental white background
-   ========================================================= */
-
-.choice *,
-.bottom-nav *,
-.bottom-nav button *,
-.nav button *{
-  box-shadow:none !important;
-}
-/* =========================================================
-   STORY DIRECTOR V16.3 — MODERN iPHONE UI POLISH
-   UI ONLY — JavaScript / API functionality untouched
-   ========================================================= */
-
-/* ---------- Premium page feel ---------- */
-body{
-  -webkit-font-smoothing:antialiased;
-  text-rendering:optimizeLegibility;
-}
-
-.wrap{
-  width:100%;
-  max-width:760px !important;
-  margin:0 auto !important;
-  padding-left:14px !important;
-  padding-right:14px !important;
-}
-
-/* ---------- Cleaner top header ---------- */
-.topbar{
-  min-height:42px !important;
-  margin:0 0 8px !important;
-  padding:6px 4px !important;
-}
-
-.brand{
-  font-size:17px !important;
-  font-weight:800 !important;
-  letter-spacing:-.35px !important;
-}
-
-/* ---------- Modern step navigation ---------- */
-.stepper{
-  display:grid !important;
-  grid-template-columns:repeat(4,1fr) !important;
-  gap:6px !important;
-  margin:4px 0 14px !important;
-  padding:3px !important;
-}
-
-.step{
-  min-height:38px !important;
-  padding:7px 4px !important;
-  border-radius:12px !important;
-  font-size:11px !important;
-  font-weight:700 !important;
-  white-space:nowrap;
-  transition:
-    transform .18s ease,
-    background .18s ease,
-    box-shadow .18s ease !important;
-}
-
-.step.active{
-  transform:translateY(-1px) !important;
-  box-shadow:0 5px 16px rgba(108,99,255,.18) !important;
-}
-
-/* ---------- Compact premium hero ---------- */
-.hero{
-  padding:18px 16px !important;
-  margin-bottom:12px !important;
-  border-radius:20px !important;
-}
-
-.hero h1{
-  font-size:24px !important;
-  line-height:1.15 !important;
-  letter-spacing:-.55px !important;
-  margin:2px 0 7px !important;
-}
-
-.hero p{
-  font-size:14px !important;
-  line-height:1.5 !important;
-}
-
-/* ---------- Choice buttons ---------- */
-.choice-grid{
-  gap:7px !important;
-}
-
-.choice{
-  min-height:44px !important;
-  padding:9px 10px !important;
-  border-radius:13px !important;
-  font-size:13px !important;
-  font-weight:750 !important;
-  transition:
-    transform .15s ease,
-    background .15s ease !important;
-}
-
-.choice:active{
-  transform:scale(.98) !important;
-}
-
-/* ---------- Modern cards ---------- */
-.card{
-  padding:15px !important;
-  margin-bottom:12px !important;
-  border-radius:19px !important;
-  overflow:hidden;
-}
-
-.card h2{
-  font-size:20px !important;
-  line-height:1.2 !important;
-  margin-top:0 !important;
-}
-
-/* ---------- Better labels ---------- */
-label{
-  font-size:14px !important;
-  font-weight:700 !important;
-}
-
-/* ---------- Inputs / selects / textareas ---------- */
-input,
-select,
-textarea{
-  border-radius:14px !important;
-  font-size:15px !important;
-  min-height:44px;
-}
-
-textarea{
-  line-height:1.5 !important;
-}
-
-.card textarea{
-  min-height:120px !important;
-}
-
-/* ---------- Buttons ---------- */
-button{
-  min-height:44px !important;
-  border-radius:13px !important;
-  font-size:14px !important;
-  font-weight:750 !important;
-  transition:
-    transform .15s ease,
-    opacity .15s ease,
-    box-shadow .15s ease !important;
-}
-
-button:active{
-  transform:scale(.98) !important;
-}
-
-/* ---------- Primary CTA ---------- */
-button.primary{
-  min-height:46px !important;
-  border-radius:14px !important;
-  font-size:15px !important;
-  box-shadow:0 7px 18px rgba(108,99,255,.20) !important;
-}
-
-/* ---------- Section spacing ---------- */
-section.page{
-  scroll-margin-top:12px;
-}
-
-/* ---------- iPhone touch optimization ---------- */
-button,
-.step,
-.choice,
-select,
-input,
-textarea{
-  -webkit-tap-highlight-color:transparent;
-}
-
-/* ---------- Prevent accidental horizontal overflow ---------- */
-html,
-body{
-  max-width:100%;
-  overflow-x:hidden !important;
-}
-
-.wrap,
-.hero,
-.card,
-.choice-grid,
-.stepper{
-  max-width:100%;
-  box-sizing:border-box;
-}
-
-/* ---------- iPhone bottom navigation breathing room ---------- */
-body{
-  padding-bottom:max(
-    18px,
-    env(safe-area-inset-bottom)
-  ) !important;
-}
-
-/* ---------- Small-screen refinement ---------- */
-@media(max-width:430px){
-
-  .wrap{
-    padding-left:10px !important;
-    padding-right:10px !important;
-  }
-
-  .topbar{
-    padding-left:3px !important;
-    padding-right:3px !important;
-  }
-
-  .step{
-    min-height:36px !important;
-    padding:6px 2px !important;
-    font-size:10px !important;
-  }
-
-  .hero{
-    padding:16px 14px !important;
-    border-radius:18px !important;
-  }
-
-  .hero h1{
-    font-size:22px !important;
-  }
-
-  .hero p{
-    font-size:13px !important;
-  }
-
-  .card{
-    padding:13px !important;
-    border-radius:17px !important;
-  }
-
-  .card h2{
-    font-size:19px !important;
-  }
-
-  input,
-  select,
-  textarea{
-    font-size:16px !important;
-  }
-
-  button{
-    min-height:45px !important;
-  }
-}
-/* ===== STORY DIRECTOR V16.3 — PREMIUM UI ===== */
 
 :root{
-  --sd-bg:#f5f7fb;
-  --sd-card:rgba(255,255,255,.88);
-  --sd-border:rgba(20,30,55,.09);
-  --sd-text:#172033;
-  --sd-muted:#6b7280;
-  --sd-accent:#635bff;
-  --sd-accent2:#8b5cf6;
-  --sd-shadow:0 10px 35px rgba(30,40,80,.08);
+  --bg:#080a18;
+  --bg2:#0d1026;
+  --surface:#11152c;
+  --surface2:#171b36;
+  --line:rgba(255,255,255,.09);
+  --line2:rgba(255,255,255,.055);
+
+  --text:#f7f5ff;
+  --muted:#aaa8bd;
+  --soft:#85839a;
+
+  --purple:#7b55ff;
+  --purple2:#a447ff;
+  --pink:#d33fd4;
+  --blue:#6478ff;
+
+  --glow:rgba(123,85,255,.32);
 }
+
+/* ---------- BASE ---------- */
 
 *{
+  box-sizing:border-box;
   -webkit-tap-highlight-color:transparent;
 }
 
 html{
   scroll-behavior:smooth;
+  background:var(--bg);
 }
 
 body{
+  margin:0;
+  min-height:100vh;
+
+  color:var(--text);
+
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Display",
+    "SF Pro Text",
+    "Segoe UI",
+    sans-serif;
+
   background:
-    radial-gradient(circle at 10% 0%,rgba(99,91,255,.10),transparent 28%),
-    radial-gradient(circle at 90% 10%,rgba(139,92,246,.08),transparent 25%),
-    var(--sd-bg) !important;
-  color:var(--sd-text);
+    radial-gradient(
+      700px 420px at 50% -120px,
+      rgba(100,70,220,.48),
+      transparent 70%
+    ),
+    radial-gradient(
+      500px 420px at 100% 55%,
+      rgba(160,45,190,.18),
+      transparent 70%
+    ),
+    linear-gradient(
+      180deg,
+      #0a0b1d 0%,
+      #080a18 55%,
+      #070914 100%
+    );
+
+  padding-bottom:125px;
 }
+
+/* ---------- MAIN WIDTH ---------- */
 
 .wrap{
-  max-width:760px !important;
-  margin:auto !important;
-  padding:12px 14px 40px !important;
+  width:100%;
+  max-width:760px;
+  margin:auto;
+
+  padding:
+    max(8px,env(safe-area-inset-top))
+    14px
+    135px;
 }
 
+/* ---------- TOP BRAND ---------- */
+
 .topbar{
-  position:sticky !important;
+  position:sticky;
   top:0;
-  z-index:50;
-  margin:0 -14px 12px !important;
-  padding:14px 16px !important;
-  background:rgba(245,247,251,.82) !important;
-  backdrop-filter:blur(18px);
-  -webkit-backdrop-filter:blur(18px);
-  border-bottom:1px solid var(--sd-border);
+  z-index:40;
+
+  margin:0 -2px 8px;
+
+  padding:8px 4px 10px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(8,10,24,.97),
+      rgba(8,10,24,.72),
+      transparent
+    );
+
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
 }
 
 .brand{
-  font-weight:800 !important;
-  letter-spacing:-.3px;
+  display:block;
+
+  background:none;
+  border:0;
+  box-shadow:none;
+
+  padding:5px 3px;
+
+  color:#fff;
+
+  font-size:19px;
+  font-weight:800;
+  letter-spacing:-.35px;
 }
+
+.brand::after{
+  content:"Script → Director → Voice";
+
+  display:block;
+
+  margin-top:3px;
+
+  color:#85839a;
+
+  font-size:12px;
+  font-weight:500;
+  letter-spacing:.1px;
+}
+
+/* ---------- OLD STEPPER
+   JS अभी भी इसे use करता है.
+   UI में इसे hide किया गया है.
+   इसलिए functionality सुरक्षित रहेगी.
+   ---------- */
 
 .stepper{
-  background:rgba(255,255,255,.75) !important;
-  border:1px solid var(--sd-border) !important;
-  border-radius:999px !important;
-  padding:6px !important;
-  box-shadow:0 5px 20px rgba(30,40,80,.05);
+  display:none !important;
 }
 
-.step{
-  border-radius:999px !important;
-  transition:.2s ease;
+/* ---------- PAGE ---------- */
+
+.page{
+  width:100%;
 }
 
-.step.active{
-  box-shadow:0 4px 14px rgba(99,91,255,.22);
+.hidden{
+  display:none !important;
 }
+
+/* ---------- HOME ---------- */
 
 .hero{
-  padding:22px 4px 18px !important;
-}
+  position:relative;
 
-.hero h1{
-  font-size:clamp(28px,7vw,42px) !important;
-  line-height:1.08 !important;
-  letter-spacing:-1.3px !important;
-  font-weight:850 !important;
-}
+  padding:30px 4px 22px;
 
-.hero p{
-  font-size:14px !important;
-  line-height:1.55 !important;
-  color:var(--sd-muted) !important;
-}
+  margin:0 0 14px;
 
-.choice-grid{
-  gap:12px !important;
-}
+  background:transparent;
+  border:0;
+  box-shadow:none;
 
-.choice{
-  min-height:105px !important;
-  padding:18px !important;
-  border:1px solid var(--sd-border) !important;
-  border-radius:20px !important;
-  background:var(--sd-card) !important;
-  box-shadow:var(--sd-shadow) !important;
-  transition:
-    transform .18s ease,
-    box-shadow .18s ease,
-    border-color .18s ease;
-}
-
-.choice:active{
-  transform:scale(.975);
-}
-
-.choice:hover{
-  transform:translateY(-2px);
-  box-shadow:0 14px 38px rgba(30,40,80,.12) !important;
-  border-color:rgba(99,91,255,.25) !important;
-}
-
-.card{
-  background:var(--sd-card) !important;
-  border:1px solid var(--sd-border) !important;
-  border-radius:22px !important;
-  box-shadow:var(--sd-shadow) !important;
-  backdrop-filter:blur(12px);
-  -webkit-backdrop-filter:blur(12px);
   overflow:hidden;
 }
 
-.card h2{
-  font-weight:800 !important;
-  letter-spacing:-.4px;
-}
+.hero::before{
+  content:"";
 
-input,
-select,
-textarea{
-  border:1px solid rgba(30,40,70,.12) !important;
-  background:rgba(248,249,253,.9) !important;
-  border-radius:14px !important;
-  transition:.18s ease;
-}
+  position:absolute;
 
-input:focus,
-select:focus,
-textarea:focus{
-  outline:none !important;
-  border-color:rgba(99,91,255,.55) !important;
-  box-shadow:0 0 0 4px rgba(99,91,255,.10) !important;
-  background:#fff !important;
-}
+  width:280px;
+  height:280px;
 
-textarea{
-  min-height:130px;
-  line-height:1.55 !important;
-}
+  right:-170px;
+  top:-90px;
 
-button{
-  border-radius:14px !important;
-  font-weight:750 !important;
-  transition:
-    transform .15s ease,
-    box-shadow .15s ease,
-    opacity .15s ease !important;
-}
+  border-radius:50%;
 
-button:active{
-  transform:scale(.97);
-}
-
-button:not(:disabled){
-  box-shadow:0 7px 18px rgba(30,40,80,.09);
-}
-
-button.primary,
-.btn-primary{
-  background:linear-gradient(135deg,var(--sd-accent),var(--sd-accent2)) !important;
-  border:none !important;
-  color:#fff !important;
-  box-shadow:0 10px 24px rgba(99,91,255,.25) !important;
-}
-
-button.primary:hover,
-.btn-primary:hover{
-  box-shadow:0 13px 30px rgba(99,91,255,.32) !important;
-}
-
-button:disabled{
-  opacity:.48 !important;
-  box-shadow:none !important;
-}
-
-label{
-  font-weight:650 !important;
-  color:#374151 !important;
-}
-
-.page{
-  animation:sdFade .28s ease;
-}
-
-@keyframes sdFade{
-  from{
-    opacity:0;
-    transform:translateY(5px);
-  }
-  to{
-    opacity:1;
-    transform:none;
-  }
-}
-
-/* Director / speaker rows */
-
-.director-row,
-.speaker-row,
-.character-row{
-  background:rgba(248,249,253,.78) !important;
-  border:1px solid var(--sd-border) !important;
-  border-radius:16px !important;
-  padding:10px !important;
-  margin-bottom:9px !important;
-}
-
-.director-row input,
-.speaker-row input,
-.character-row input{
-  background:#fff !important;
-}
-
-/* Output / story area */
-
-#storyOutput,
-#output,
-.output,
-.story-output{
-  border-radius:18px !important;
-  background:rgba(248,249,253,.85) !important;
-  border:1px solid var(--sd-border) !important;
-  line-height:1.65 !important;
-}
-
-/* Better mobile controls */
-
-@media(max-width:600px){
-
-  .wrap{
-    padding-left:12px !important;
-    padding-right:12px !important;
-  }
-
-  .topbar{
-    margin-left:-12px !important;
-    margin-right:-12px !important;
-  }
-
-  .choice-grid{
-    grid-template-columns:1fr !important;
-  }
-
-  .choice{
-    min-height:88px !important;
-  }
-
-  .card{
-    border-radius:19px !important;
-  }
-
-  input,
-  select,
-  textarea{
-    font-size:16px !important;
-  }
-
-  button{
-    min-height:48px !important;
-  }
-}
-
-/* Safe-area support for iPhone */
-
-@supports(padding:max(0px)){
-  .wrap{
-    padding-bottom:max(40px,env(safe-area-inset-bottom)) !important;
-  }
-
-  .topbar{
-    padding-top:max(14px,env(safe-area-inset-top)) !important;
-  }
-}
-/* STORY DIRECTOR V17 — PREMIUM DARK INDIGO iPHONE THEME */
-
-:root{
-  --sd-bg:#070a18;
-  --sd-panel:rgba(18,24,55,.78);
-  --sd-line:rgba(255,255,255,.10);
-  --sd-text:#f7f7ff;
-  --sd-muted:#a8aecb;
-  --sd-purple:#7c5cff;
-  --sd-pink:#ec4fd8;
-  --sd-shadow:0 18px 50px rgba(0,0,0,.28);
-}
-
-html,body{
   background:
-    radial-gradient(900px 500px at 0% -10%,rgba(124,92,255,.22),transparent 55%),
-    radial-gradient(700px 500px at 100% 15%,rgba(236,79,216,.12),transparent 58%),
-    linear-gradient(180deg,#080b1d 0%,#0a0e24 48%,#070a18 100%) !important;
-  color:var(--sd-text)!important;
-}
+    radial-gradient(
+      circle,
+      rgba(123,85,255,.28),
+      transparent 68%
+    );
 
-body{
-  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",
-  "SF Pro Text",Inter,system-ui,sans-serif!important;
-  -webkit-font-smoothing:antialiased;
-}
-
-.wrap{
-  max-width:760px!important;
-  padding:10px 14px 112px!important;
-}
-
-.topbar{
-  position:sticky!important;
-  top:0;
-  z-index:80;
-  margin:0 -14px 8px!important;
-  padding:12px 16px!important;
-  min-height:48px!important;
-  background:rgba(7,10,24,.72)!important;
-  border:0!important;
-  border-bottom:1px solid rgba(255,255,255,.07)!important;
-  backdrop-filter:blur(22px);
-  -webkit-backdrop-filter:blur(22px);
-}
-
-.brand{
-  font-size:18px!important;
-  font-weight:800!important;
-  color:#fff!important;
-}
-
-.stepper{
-  position:sticky!important;
-  top:57px!important;
-  z-index:70;
-  display:grid!important;
-  grid-template-columns:repeat(4,1fr)!important;
-  gap:3px!important;
-  margin:5px 0 18px!important;
-  padding:4px!important;
-  background:rgba(17,22,49,.72)!important;
-  border:1px solid rgba(255,255,255,.08)!important;
-  border-radius:18px!important;
-  box-shadow:0 10px 30px rgba(0,0,0,.18)!important;
-  backdrop-filter:blur(18px);
-  -webkit-backdrop-filter:blur(18px);
-}
-
-.step{
-  min-height:38px!important;
-  padding:7px 3px!important;
-  border-radius:14px!important;
-  background:transparent!important;
-  color:#aeb4d0!important;
-  font-size:11px!important;
-  font-weight:750!important;
-}
-
-.step.active{
-  background:
-    linear-gradient(
-      135deg,
-      rgba(124,92,255,.28),
-      rgba(168,85,247,.18)
-    )!important;
-  color:#fff!important;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.08),
-    0 5px 16px rgba(124,92,255,.16)!important;
-}
-
-.hero{
-  padding:20px 2px 12px!important;
-  margin-bottom:12px!important;
-  background:transparent!important;
-  border:0!important;
-  box-shadow:none!important;
+  pointer-events:none;
 }
 
 .hero h1{
-  font-size:clamp(30px,8vw,44px)!important;
-  line-height:1.03!important;
-  letter-spacing:-1.7px!important;
-  color:#fff!important;
-  margin:0 0 9px!important;
-  font-weight:850!important;
+  position:relative;
+
+  margin:5px 0 9px;
+
+  color:#fff;
+
+  font-size:clamp(30px,8vw,40px);
+  line-height:1.05;
+
+  letter-spacing:-1.5px;
+
+  font-weight:800;
 }
 
 .hero p{
-  font-size:14px!important;
-  line-height:1.55!important;
-  color:var(--sd-muted)!important;
-  margin:0!important;
+  position:relative;
+
+  margin:0;
+
+  max-width:680px;
+
+  color:var(--muted);
+
+  font-size:15px;
+  line-height:1.55;
 }
 
+/* ---------- HOME CHOICES ---------- */
+
 .choice-grid{
-  display:flex!important;
-  flex-direction:column!important;
-  gap:3px!important;
-  margin-top:14px!important;
+  display:grid;
+
+  grid-template-columns:1fr;
+
+  gap:10px;
+
+  margin-top:25px;
 }
 
 .choice{
-  min-height:66px!important;
-  width:100%!important;
-  padding:12px 4px!important;
-  display:flex!important;
-  align-items:center!important;
-  text-align:left!important;
-  gap:13px!important;
-  background:transparent!important;
-  border:0!important;
-  border-bottom:1px solid rgba(255,255,255,.08)!important;
-  border-radius:0!important;
-  box-shadow:none!important;
-  color:#fff!important;
-}
+  position:relative;
 
-.choice:first-child{
-  border-top:1px solid rgba(255,255,255,.08)!important;
-}
+  width:100%;
 
-.choice b{
-  font-size:15px!important;
-  color:#fff!important;
-  display:block!important;
-}
+  min-height:78px;
 
-.choice span{
-  font-size:12px!important;
-  color:#9ea6c5!important;
-  display:block!important;
-  margin-top:2px!important;
-}
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
 
-.choice:active{
-  transform:scale(.985)!important;
-  background:rgba(124,92,255,.08)!important;
-}
+  text-align:left;
 
-.card{
+  padding:16px 18px;
+
+  color:#fff;
+
   background:
     linear-gradient(
       145deg,
-      rgba(18,24,55,.78),
-      rgba(10,14,34,.82)
-    )!important;
-  border:1px solid rgba(255,255,255,.09)!important;
-  border-radius:20px!important;
-  box-shadow:var(--sd-shadow)!important;
-  padding:16px!important;
-  margin-bottom:12px!important;
-  backdrop-filter:blur(18px);
-  -webkit-backdrop-filter:blur(18px);
+      rgba(30,31,62,.95),
+      rgba(17,19,42,.96)
+    );
+
+  border:1px solid var(--line);
+
+  border-radius:20px;
+
+  box-shadow:
+    0 12px 35px rgba(0,0,0,.22),
+    inset 0 1px 0 rgba(255,255,255,.04);
+
+  transition:
+    transform .18s ease,
+    border-color .18s ease,
+    box-shadow .18s ease;
+}
+
+.choice:active{
+  transform:scale(.985);
+}
+
+.choice b{
+  display:block;
+
+  margin-bottom:5px;
+
+  color:#fff;
+
+  font-size:17px;
+  font-weight:750;
+}
+
+.choice span{
+  color:#9693a9;
+
+  font-size:13px;
+
+  line-height:1.4;
+}
+
+/* Different accent hints */
+
+#newStory{
+  border-color:rgba(123,85,255,.22);
+}
+
+#pasteStory{
+  border-color:rgba(70,130,255,.16);
+}
+
+#openProjects{
+  border-color:rgba(255,255,255,.08);
+}
+
+/* ---------- CARDS
+   Make existing structural cards visually disappear.
+   ---------- */
+
+.card{
+  position:relative;
+
+  margin:0 0 24px;
+
+  padding:0;
+
+  background:transparent;
+
+  border:0;
+
+  border-radius:0;
+
+  box-shadow:none;
+
+  color:var(--text);
 }
 
 .card h2{
-  color:#fff!important;
-  font-size:20px!important;
-  font-weight:800!important;
-  letter-spacing:-.4px!important;
+  margin:0 0 18px;
+
+  color:#fff;
+
+  font-size:22px;
+  line-height:1.2;
+
+  letter-spacing:-.5px;
 }
 
-.card label{
-  color:#aeb5d1!important;
-  font-size:13px!important;
-  font-weight:650!important;
+.section-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  gap:10px;
+
+  margin-bottom:17px;
 }
 
+/* ---------- LABELS ---------- */
+
+label{
+  display:block;
+
+  margin:18px 0 8px;
+
+  color:#aaa7ba;
+
+  font-size:13px;
+  font-weight:650;
+}
+
+.small,
+.muted{
+  color:var(--muted);
+
+  font-size:13px;
+
+  line-height:1.5;
+}
+
+/* ---------- INPUTS ---------- */
+
+textarea,
 input,
-select,
-textarea{
-  color:#f7f8ff!important;
-  background:rgba(7,10,25,.82)!important;
-  border:1px solid rgba(255,255,255,.10)!important;
-  border-radius:13px!important;
-  box-shadow:none!important;
-}
+select{
+  width:100%;
 
-input::placeholder,
-textarea::placeholder{
-  color:#707895!important;
-}
+  color:#f6f3ff;
 
-input:focus,
-select:focus,
-textarea:focus{
-  border-color:rgba(124,92,255,.70)!important;
-  box-shadow:0 0 0 3px rgba(124,92,255,.13)!important;
-}
-
-textarea{
-  min-height:128px!important;
-}
-
-button{
-  border-radius:13px!important;
-  font-weight:750!important;
-}
-
-button.primary{
   background:
     linear-gradient(
-      135deg,
-      var(--sd-purple),
-      var(--sd-pink)
-    )!important;
-  color:#fff!important;
-  border:0!important;
+      145deg,
+      rgba(20,22,43,.98),
+      rgba(12,14,30,.98)
+    );
+
+  border:1px solid rgba(255,255,255,.11);
+
+  border-radius:17px;
+
+  padding:14px 15px;
+
+  outline:none;
+
+  font-family:inherit;
+
+  font-size:16px;
+
   box-shadow:
-    0 10px 28px rgba(124,92,255,.28)!important;
+    inset 0 1px 0 rgba(255,255,255,.025);
 }
 
-button.secondary{
-  background:rgba(255,255,255,.055)!important;
-  color:#e8ebfa!important;
-  border:1px solid rgba(255,255,255,.09)!important;
-  box-shadow:none!important;
+textarea{
+  min-height:190px;
+
+  resize:vertical;
+
+  line-height:1.55;
 }
 
-button.danger{
-  background:rgba(239,68,68,.10)!important;
-  color:#ff9b9b!important;
-  border:1px solid rgba(239,68,68,.16)!important;
+textarea::placeholder,
+input::placeholder{
+  color:#69677c;
+}
+
+textarea:focus,
+input:focus,
+select:focus{
+  border-color:rgba(123,85,255,.7);
+
+  box-shadow:
+    0 0 0 3px rgba(123,85,255,.12),
+    inset 0 1px 0 rgba(255,255,255,.03);
+}
+
+/* ---------- GRIDS ---------- */
+
+.grid{
+  display:grid;
+
+  grid-template-columns:1fr 1fr;
+
+  gap:18px;
+}
+
+.three{
+  display:grid;
+
+  grid-template-columns:repeat(3,1fr);
+
+  gap:15px;
+}
+
+/* ---------- BUTTONS ---------- */
+
+button{
+  appearance:none;
+  -webkit-appearance:none;
+
+  border:0;
+
+  border-radius:15px;
+
+  padding:13px 15px;
+
+  color:#f7f5ff;
+
+  background:#20233d;
+
+  font-family:inherit;
+
+  font-size:15px;
+  font-weight:700;
+
+  cursor:pointer;
+
+  transition:
+    transform .15s ease,
+    opacity .15s ease,
+    box-shadow .15s ease;
+}
+
+button:active{
+  transform:scale(.975);
 }
 
 button:disabled{
-  opacity:.42!important;
-  box-shadow:none!important;
+  opacity:.42;
+
+  cursor:not-allowed;
+
+  transform:none;
 }
 
-.speaker,
-.seg,
-.project,
-.director-row,
-.speaker-row,
-.character-row{
-  background:rgba(255,255,255,.035)!important;
-  border:1px solid rgba(255,255,255,.075)!important;
-  border-radius:15px!important;
-  padding:11px!important;
-  margin-bottom:8px!important;
+/* Primary CTA */
+
+.primary{
+  width:100%;
+
+  margin-top:15px;
+
+  min-height:52px;
+
+  color:#fff;
+
+  background:
+    linear-gradient(
+      105deg,
+      #5635e8 0%,
+      #8147ee 50%,
+      #d044c9 100%
+    );
+
+  border:1px solid rgba(255,255,255,.18);
+
+  border-radius:17px;
+
+  box-shadow:
+    0 12px 30px rgba(103,65,232,.28),
+    inset 0 1px 0 rgba(255,255,255,.16);
+
+  font-size:16px;
+}
+
+.primary:active{
+  box-shadow:
+    0 6px 18px rgba(103,65,232,.22);
+}
+
+/* Secondary */
+
+.secondary{
+  color:#ddd9ed;
+
+  background:#1a1d34;
+
+  border:1px solid rgba(255,255,255,.08);
+}
+
+/* Danger */
+
+.danger{
+  color:#ffb5c5;
+
+  background:#281a29;
+
+  border:1px solid rgba(255,100,140,.12);
+}
+
+/* ---------- ROW ---------- */
+
+.row{
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:8px;
+
+  margin-top:12px;
+}
+
+.row button{
+  flex:1;
+
+  min-width:120px;
+}
+
+/* ---------- ADVANCED ---------- */
+
+.advanced{
+  margin-top:22px;
+
+  padding-top:14px;
+
+  border-top:1px solid rgba(255,255,255,.07);
+
+  color:#b6b1c6;
+}
+
+.advanced summary{
+  cursor:pointer;
+
+  color:#c5bfd9;
+
+  font-size:14px;
+}
+
+/* ---------- CHECKBOX ---------- */
+
+.check{
+  display:flex;
+  align-items:center;
+
+  gap:10px;
+
+  margin:11px 0;
+
+  padding:11px 0;
+
+  color:#d9d5e6;
+
+  background:transparent;
+
+  border:0;
+}
+
+.check input{
+  width:20px;
+  height:20px;
+
+  padding:0;
+
+  accent-color:var(--purple);
+}
+
+/* ---------- PILLS ---------- */
+
+.pill{
+  display:inline-flex;
+  align-items:center;
+
+  min-height:25px;
+
+  padding:4px 9px;
+
+  color:#cfc7ef;
+
+  background:rgba(123,85,255,.13);
+
+  border:1px solid rgba(123,85,255,.18);
+
+  border-radius:20px;
+
+  font-size:11px;
+}
+
+/* ---------- SPEAKERS ---------- */
+
+.speaker{
+  margin-top:0;
+
+  padding:16px 0;
+
+  background:transparent;
+
+  border:0;
+
+  border-bottom:1px solid rgba(255,255,255,.075);
+
+  border-radius:0;
+
+  box-shadow:none;
+}
+
+.speaker:last-child{
+  border-bottom:0;
 }
 
 .speaker-head{
   display:flex;
-  justify-content:space-between;
+
   align-items:center;
-  gap:8px;
+
+  justify-content:space-between;
+
+  gap:12px;
 }
 
-.speaker-name,
-.who{
-  color:#fff!important;
-  font-weight:800!important;
+.speaker-name{
+  color:#fff;
+
+  font-size:17px;
+
+  font-weight:800;
 }
 
-.meta,
-.small,
-.status{
-  color:#929bb9!important;
+/* ---------- SEGMENTS ---------- */
+
+.seg{
+  position:relative;
+
+  margin-top:0;
+
+  padding:16px 0;
+
+  background:transparent;
+
+  border:0;
+
+  border-bottom:1px solid rgba(255,255,255,.075);
+
+  border-radius:0;
 }
 
-.pill{
-  background:rgba(124,92,255,.14)!important;
-  color:#c8bfff!important;
-  border:1px solid rgba(124,92,255,.22)!important;
-  border-radius:999px!important;
+.seg:last-child{
+  border-bottom:0;
+}
+
+.seg .who{
+  color:#cfc4ff;
+
+  font-size:14px;
+
+  font-weight:800;
+}
+
+.seg .meta{
+  margin:5px 0 9px;
+
+  color:#817d92;
+
+  font-size:11px;
 }
 
 .seg textarea{
-  min-height:74px!important;
-  background:rgba(5,8,21,.76)!important;
+  min-height:78px;
+
+  font-size:15px;
 }
 
-.nav,
-.bottom-nav{
-  position:fixed!important;
-  left:12px!important;
-  right:12px!important;
-  bottom:max(10px,env(safe-area-inset-bottom))!important;
+/* ---------- PROJECTS ---------- */
+
+.project{
+  display:flex;
+  flex-direction:column;
+
+  gap:4px;
+
+  margin-top:0;
+
+  padding:15px 0;
+
+  background:transparent;
+
+  border:0;
+
+  border-bottom:1px solid rgba(255,255,255,.075);
+
+  border-radius:0;
+}
+
+.project:last-child{
+  border-bottom:0;
+}
+
+.project b{
+  display:block;
+
+  color:#f6f3ff;
+
+  font-size:16px;
+}
+
+/* ---------- EMPTY ---------- */
+
+.empty{
+  padding:24px 10px;
+
+  text-align:center;
+
+  color:#817e92;
+
+  background:transparent;
+
+  border:1px dashed rgba(255,255,255,.09);
+
+  border-radius:17px;
+
+  font-size:13px;
+}
+
+/* ---------- STATUS ---------- */
+
+.status{
+  display:none;
+
+  margin-top:12px;
+
+  padding:12px 13px;
+
+  border-radius:14px;
+
+  font-size:13px;
+
+  line-height:1.5;
+
+  white-space:pre-wrap;
+
+  border:1px solid rgba(255,255,255,.07);
+}
+
+.status.show{
+  display:block;
+}
+
+.status.ok{
+  color:#9de2b5;
+
+  background:#12251c;
+}
+
+.status.err{
+  color:#ff9eae;
+
+  background:#29171d;
+}
+
+.status.info{
+  color:#aebcff;
+
+  background:#171d35;
+}
+
+/* ---------- AUDIO ---------- */
+
+.audio-box{
+  margin-top:18px;
+
+  padding:0;
+
+  background:transparent;
+
+  border:0;
+
+  box-shadow:none;
+}
+
+audio{
+  width:100%;
+
+  height:44px;
+
+  margin-top:12px;
+}
+
+/* ---------- RANGE ---------- */
+
+.range-row{
+  display:grid;
+
+  grid-template-columns:1fr 55px;
+
+  gap:10px;
+
+  align-items:center;
+}
+
+.range-row input[type=range]{
+  padding:0;
+
+  background:transparent;
+
+  border:0;
+
+  box-shadow:none;
+
+  accent-color:var(--purple);
+}
+
+.range-row output{
+  color:#bbb5cd;
+
+  text-align:right;
+
+  font-size:13px;
+}
+
+/* ---------- TOOLBAR ---------- */
+
+.toolbar{
+  display:flex;
+
+  gap:8px;
+
+  flex-wrap:wrap;
+}
+
+.toolbar button{
+  flex:0 0 auto;
+}
+
+/* =========================================================
+   BOTTOM NAVIGATION
+   This is the main navigation from the reference design.
+   Existing JS data-nav values are untouched.
+   ========================================================= */
+
+.nav{
+  position:fixed;
+
+  left:7px;
+  right:7px;
+
+  bottom:max(7px,env(safe-area-inset-bottom));
+
   z-index:100;
-  background:rgba(10,14,34,.82)!important;
-  border:1px solid rgba(255,255,255,.10)!important;
-  border-radius:22px!important;
-  box-shadow:0 18px 50px rgba(0,0,0,.38)!important;
-  backdrop-filter:blur(24px);
-  -webkit-backdrop-filter:blur(24px);
-  display:grid!important;
-  grid-template-columns:repeat(5,1fr)!important;
-  padding:6px 4px!important;
+
+  display:grid;
+
+  grid-template-columns:repeat(5,1fr);
+
+  gap:4px;
+
+  padding:7px;
+
+  background:
+    rgba(17,18,38,.88);
+
+  border:1px solid rgba(255,255,255,.10);
+
+  border-radius:23px;
+
+  box-shadow:
+    0 20px 55px rgba(0,0,0,.5),
+    inset 0 1px 0 rgba(255,255,255,.06);
+
+  backdrop-filter:blur(25px);
+  -webkit-backdrop-filter:blur(25px);
 }
 
-.nav button,
-.bottom-nav button,
-.nav a{
-  background:transparent!important;
-  border:0!important;
-  box-shadow:none!important;
-  color:#8f97b7!important;
-  border-radius:15px!important;
-  min-height:54px!important;
-  padding:5px 2px!important;
-  font-size:10px!important;
-  font-weight:700!important;
+.nav button{
+  min-height:55px;
+
+  padding:7px 2px;
+
+  color:#858198;
+
+  background:transparent;
+
+  border:0;
+
+  border-radius:17px;
+
+  font-size:11px;
+
+  font-weight:550;
+
+  line-height:1.35;
+
+  box-shadow:none;
 }
 
-.nav button.active,
-.bottom-nav button.active,
-.nav a.active{
-  color:#fff!important;
+.nav button.active{
+  color:#fff;
+
   background:
     linear-gradient(
-      180deg,
-      rgba(124,92,255,.25),
-      rgba(124,92,255,.10)
-    )!important;
+      135deg,
+      #7352ed,
+      #5c45dc
+    );
+
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.08)!important;
+    0 8px 22px rgba(100,70,225,.35),
+    inset 0 1px 0 rgba(255,255,255,.12);
 }
 
-.hidden{
-  display:none!important;
+.nav button:active{
+  transform:scale(.96);
 }
 
-.page{
-  animation:sdIn .22s ease;
-}
+/* ---------- iPHONE SMALL SCREEN ---------- */
 
-@keyframes sdIn{
-  from{
-    opacity:.2;
-    transform:translateY(4px);
-  }
-  to{
-    opacity:1;
-    transform:none;
-  }
-}
-
-@media(max-width:600px){
+@media(max-width:700px){
 
   .wrap{
-    padding-left:12px!important;
-    padding-right:12px!important;
-    padding-bottom:112px!important;
+    padding-left:11px;
+    padding-right:11px;
   }
 
-  .topbar{
-    margin-left:-12px!important;
-    margin-right:-12px!important;
+  .grid{
+    grid-template-columns:1fr 1fr;
   }
 
-  .stepper{
-    top:56px!important;
+  .three{
+    grid-template-columns:1fr;
+    gap:3px;
+  }
+
+  .hero{
+    padding-top:24px;
   }
 
   .hero h1{
-    font-size:32px!important;
+    font-size:31px;
   }
 
-  .card{
-    padding:14px!important;
-    border-radius:18px!important;
+  .choice{
+    min-height:74px;
   }
 
-  input,
-  select,
-  textarea{
-    font-size:16px!important;
+  .card h2{
+    font-size:21px;
+  }
+}
+
+/* ---------- VERY SMALL iPHONE ---------- */
+
+@media(max-width:380px){
+
+  .grid{
+    grid-template-columns:1fr;
   }
 
   .nav{
-    left:8px!important;
-    right:8px!important;
-    bottom:max(7px,env(safe-area-inset-bottom))!important;
-    border-radius:20px!important;
+    left:5px;
+    right:5px;
+
+    border-radius:20px;
+
+    padding:6px;
+  }
+
+  .nav button{
+    min-height:52px;
+
+    font-size:10px;
+  }
+
+  .choice b{
+    font-size:16px;
+  }
+
+  textarea{
+    min-height:175px;
   }
 }
+
+/* ---------- REDUCED MOTION ---------- */
 
 @media(prefers-reduced-motion:reduce){
 
   *,
   *::before,
   *::after{
-    animation:none!important;
-    transition:none!important;
+    scroll-behavior:auto !important;
+    transition:none !important;
   }
 }
 
-button,
-select,
-input,
-textarea,
-.step{
-  -webkit-tap-highlight-color:transparent;
-  touch-action:manipulation;
+/* ---------- SAFE AREA ---------- */
+
+@supports(padding:max(0px)){
+
+  .wrap{
+    padding-bottom:
+      max(135px,calc(115px + env(safe-area-inset-bottom)));
+  }
 }
+
 </style>
 </head>
 <body>
